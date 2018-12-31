@@ -11,6 +11,19 @@
   <meta name="Description" content="An indoor gardening assistant">
 </head>
 <body>
+  <noscript>JavaScript is disabled!</noscript>
   <div>Hello World</div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        messaging.useServiceWorker(registration);
+        console.log('[SW] Service worker is all cool.');
+      }).catch(function(e) {
+        console.error('[SW] Service worker is not so cool.', e);
+        throw e;
+      });
+    }
+  </script>
 </body>
 </html>
