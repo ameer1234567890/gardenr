@@ -33,7 +33,7 @@ if __name__ == '__main__':
     try:
         with open(PID_FILE, 'w') as fh:
             fh.write(str(os.getpid()))
-        run_server_thread = multiprocessing.Process(target=crun_server)
+        run_server_thread = multiprocessing.Process(target=run_server)
         run_server_thread.start()
     except KeyboardInterrupt:
         httpd.server_close()
