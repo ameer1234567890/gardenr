@@ -15,7 +15,7 @@
   <h4>Gardenr</h4>
   <div>Updated: <span id="updated"></span></div>
   <script>
-    function getData() {
+    (function getData() {
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.open('GET', '/data.json', true);
       xmlhttp.onreadystatechange = function() {
@@ -29,8 +29,7 @@
       }
       xmlhttp.send(null);
       setTimeout(getData, 10000);
-    }
-    getData();
+    })();
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
