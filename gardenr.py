@@ -31,7 +31,7 @@ def run_server():
 
 def run_server():
     data = {}
-    data['updated'] = datetime.datetime.now()
+    data['updated'] = str(datetime.datetime.now())
     json_data = json.dumps(data)
     with open(UPDATE_FILE, 'w') as fh:
         fh.write(json_data)
