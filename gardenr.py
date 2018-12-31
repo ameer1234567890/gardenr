@@ -29,12 +29,14 @@ def run_server():
     httpd.serve_forever()
 
 
-def run_server():
-    data = {}
-    data['updated'] = str(datetime.datetime.now())
-    json_data = json.dumps(data)
-    with open(UPDATE_FILE, 'w') as fh:
-        fh.write(json_data)
+def update_data():
+    while True:
+        data = {}
+        data['updated'] = str(datetime.datetime.now())
+        json_data = json.dumps(data)
+        with open(UPDATE_FILE, 'w') as fh:
+            fh.write(json_data)
+        time.sleep(UPDATE_INTERVAL)
 
 
 if __name__ == '__main__':
@@ -43,9 +45,12 @@ if __name__ == '__main__':
             fh.write(str(os.getpid()))
         run_server_thread = multiprocessing.Process(target=run_server)
         run_server_thread.start()
+        update_data_thread = multiprocessing.Process(target=update_data)
+        update_data_thread.start()
     except KeyboardInterrupt:
         httpd.server_close()
         run_server_thread.terminate()
+        update_data_thread.terminate()
         #GPIO.cleanup()
         #print('GPIO cleanup done!')
         os.remove(PID_FILE)
