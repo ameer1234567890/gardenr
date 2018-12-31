@@ -29,7 +29,7 @@ def run_server():
 
 
 def run_server():
-    data = "{ \"updated\":\"{}\" }".format(datetime.datetime())
+    data = "{ \"updated\":\"{}\" }".format(datetime.datetime.now())
     with open(UPDATE_FILE, 'w') as fh:
         fh.write(data)
 
