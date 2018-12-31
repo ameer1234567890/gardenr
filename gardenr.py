@@ -13,5 +13,7 @@ os.chdir(web_dir)
 
 Handler = http.server.SimpleHTTPRequestHandler
 httpd = socketserver.TCPServer(("", PORT), Handler)
+httpd.socket = ssl.wrap_socket(httpd.socket, certfile='../tls/device.pem',
+                                   server_side=True)
 print("serving at port", PORT)
 httpd.serve_forever()
