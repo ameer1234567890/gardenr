@@ -12,8 +12,22 @@
 </head>
 <body>
   <noscript>JavaScript is disabled!</noscript>
-  <div>Hello World</div>
+  <h4>Gardenr</h4>
+  <div>Updated: <span id="updated"></span></div>
   <script>
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET', '/data.json', true);
+    xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState == 4) {
+        if(xmlhttp.status == 200) {
+          var obj = JSON.parse(xmlhttp.responseText);
+          var updatedTimestamp = obj.updated;
+          document.getElementById('updated').innerHTML = Date(updatedTimestamp);
+        }
+      }
+    };
+    xmlhttp.send(null);
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
       .then((registration) => {
