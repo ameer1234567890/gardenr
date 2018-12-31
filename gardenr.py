@@ -13,12 +13,13 @@ import os
 
 PORT = 443
 PID_FILE = '/tmp/gardenr.pid'
+UPDATE_FILE = '/pi/home/gardenr/www/data.json'
 UPDATE_INTERVAL = 10  # Update every 10 seconds
+
 
 def run_server():
     web_dir = os.path.join(os.path.dirname(__file__), 'www')
     os.chdir(web_dir)
-
     Handler = http.server.SimpleHTTPRequestHandler
     httpd = socketserver.TCPServer(('', PORT), Handler)
     httpd.socket = ssl.wrap_socket(httpd.socket, certfile='/home/pi/tls/device.pem',
@@ -27,7 +28,11 @@ def run_server():
     httpd.serve_forever()
 
 
-datetime.datetime.now()
+def run_server():
+    data = "{ \"updated\":\"{}\" }".format(datetime.datetime())
+    with open(UPDATE_FILE, 'w') as fh:
+        fh.write(data)
+
 
 if __name__ == '__main__':
     try:
