@@ -7,7 +7,7 @@ import socketserver
 import ssl
 import os
 
-PORT = 8000
+PORT = 443
 
 web_dir = os.path.join(os.path.dirname(__file__), 'www')
 os.chdir(web_dir)
