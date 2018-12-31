@@ -32,7 +32,7 @@ def run_server():
 def update_data():
     while True:
         data = {}
-        data['updated'] = str(datetime.datetime.now())
+        data['updated'] = str(time.time())
         json_data = json.dumps(data)
         with open(UPDATE_FILE, 'w') as fh:
             fh.write(json_data)
