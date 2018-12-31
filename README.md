@@ -1,2 +1,2 @@
-# gardenr
+# Gardenr
 An indoor gardening assistant
