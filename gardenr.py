@@ -10,6 +10,7 @@ import datetime
 import multiprocessing
 #import RPi.GPIO as GPIO
 import os
+import json
 
 PORT = 443
 PID_FILE = '/tmp/gardenr.pid'
@@ -29,9 +30,11 @@ def run_server():
 
 
 def run_server():
-    data = "{ \"updated\":\"{}\" }".format(datetime.datetime.now())
+    data = {}
+    data['updated'] = datetime.datetime.now()
+    json_data = json.dumps(data)
     with open(UPDATE_FILE, 'w') as fh:
-        fh.write(data)
+        fh.write(json_data)
 
 
 if __name__ == '__main__':
