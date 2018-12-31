@@ -14,7 +14,7 @@ import json
 
 PORT = 443
 PID_FILE = '/tmp/gardenr.pid'
-UPDATE_FILE = '/pi/home/gardenr/www/data.json'
+UPDATE_FILE = '/home/pi/gardenr/www/data.json'
 UPDATE_INTERVAL = 10  # Update every 10 seconds
 
 
