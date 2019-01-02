@@ -16,7 +16,7 @@ import smbus
 PORT = 443
 PID_FILE = '/tmp/gardenr.pid'
 UPDATE_FILE = '/home/pi/gardenr/www/data.json'
-UPDATE_INTERVAL = 30  # Update every 10 seconds
+UPDATE_INTERVAL = 10  # Update every 10 seconds
 ADC_ADDRESS = 0x48
 data = {}
 
@@ -59,7 +59,6 @@ def update_screen():
     updated_time = str(datetime.datetime.fromtimestamp(float(data['updated'])).strftime('%Y-%m-%d %H:%M:%S'))
     moisture = get_moisture()
     moisture_lcd = 'MOISTURE:' + str(int(moisture * 10))
-    print(moisture_lcd)
     my_lcd = I2C_LCD_driver.lcd()
     my_lcd.lcd_display_string(updated_time, 1, 0)
     my_lcd.lcd_display_string(moisture_lcd, 2, 0)
