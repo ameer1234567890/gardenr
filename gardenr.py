@@ -16,7 +16,7 @@ import I2C_LCD_driver
 PORT = 443
 PID_FILE = '/tmp/gardenr.pid'
 UPDATE_FILE = '/home/pi/gardenr/www/data.json'
-UPDATE_INTERVAL = 10  # Update every 10 seconds
+UPDATE_INTERVAL = 30  # Update every 10 seconds
 data = {}
 Handler = http.server.SimpleHTTPRequestHandler
 httpd = socketserver.TCPServer(('', PORT), Handler)
