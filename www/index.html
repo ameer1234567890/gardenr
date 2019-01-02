@@ -27,7 +27,7 @@
           if(xmlhttp.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText);
             var updatedTimestamp = obj.updated;
-            document.getElementById('updated').innerHTML = Date(updatedTimestamp);
+            document.getElementById('updated').innerHTML = new Date(updatedTimestamp * 1000);
           }
         }
       }
