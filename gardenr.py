@@ -32,6 +32,7 @@ def run_server():
 
 def update_data():
     while True:
+        print('Updating data...')
         data = {}
         data['updated'] = str(time.time())
         json_data = json.dumps(data)
@@ -42,9 +43,12 @@ def update_data():
 
 
 def update_screen():
+    print('Updating screen...')
     my_lcd = I2C_LCD_driver.lcd()
-    updated_time = 'Updated: {}'.format(str(time.time()))
+    print(data['updated'])
+    updated_time = 'Updated: {}'.format(str(datetime.utcfromtimestamp(data['updated']).strftime('%Y-%m-%d %H:%M:%S')))
     soil_moisture = 'Soil Moisture: {}'.format('N/A')
+    print(soil_moisture)
     my_lcd.lcd_display_string(updated_time, 1, 0)
     my_lcd.lcd_display_string(soil_moisture, 2, 3)
 
