@@ -48,11 +48,11 @@ def update_screen():
     str_pad = ' ' * 16
     updated_time = str_pad + 'Updated: {}'.format(str(datetime.datetime.fromtimestamp(float(data['updated'])).strftime('%Y-%m-%d %H:%M:%S')))
     while True:
-    for i in range (0, len(updated_time)):
-        lcd_text = updated_time[i:(i+16)]
-        my_lcd.lcd_display_string(lcd_text, 1)
-        sleep(0.4)
-        my_lcd.lcd_display_string(str_pad, 1)
+        for i in range (0, len(updated_time)):
+            lcd_text = updated_time[i:(i+16)]
+            my_lcd.lcd_display_string(lcd_text, 1)
+            sleep(0.4)
+            my_lcd.lcd_display_string(str_pad, 1)
     soil_moisture = 'Soil Moisture: {}'.format('N/A')
     print(soil_moisture)
     my_lcd.lcd_display_string(updated_time, 1, 0)
