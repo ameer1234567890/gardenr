@@ -68,12 +68,12 @@ if __name__ == '__main__':
     try:
         with open(PID_FILE, 'w') as fh:
             fh.write(str(os.getpid()))
-        #run_server_thread = multiprocessing.Process(target=run_server)
-        #run_server_thread.start()
+        run_server_thread = multiprocessing.Process(target=run_server)
+        run_server_thread.start()
         update_data_thread = multiprocessing.Process(target=update_data)
         update_data_thread.start()
     except:
-        #run_server_thread.terminate()
+        run_server_thread.terminate()
         update_data_thread.terminate()
         os.remove(PID_FILE)
         print('PID file removed!')
