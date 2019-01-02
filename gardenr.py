@@ -51,7 +51,7 @@ def update_screen():
         for i in range (0, len(updated_time)):
             lcd_text = updated_time[i:(i+16)]
             my_lcd.lcd_display_string(lcd_text, 1)
-            time.sleep(0.4)
+            time.sleep(0.2)
             my_lcd.lcd_display_string(str_pad, 1)
     soil_moisture = 'Soil Moisture: {}'.format('N/A')
     print(soil_moisture)
