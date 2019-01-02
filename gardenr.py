@@ -47,7 +47,7 @@ def update_screen():
     print('Updating screen...')
     str_pad = ' ' * 16
     updated_time = 'Updated: {}'.format(str(datetime.datetime.fromtimestamp(float(data['updated'])).strftime('%Y-%m-%d %H:%M:%S')))
-    soil_moisture = 'S. Moisture: N/A'
+    soil_moisture = 'Moisture: N/A'
     my_lcd.lcd_display_string(soil_moisture, 2, 0)
     updated_time = str_pad + updated_time
     while True:
@@ -67,7 +67,6 @@ if __name__ == '__main__':
         update_data_thread = multiprocessing.Process(target=update_data)
         update_data_thread.start()
     except KeyboardInterrupt:
-        sys.exit(0)
         print('Exiting...')
         httpd.server_close()
         #run_server_thread.terminate()
