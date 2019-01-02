@@ -36,7 +36,8 @@ def run_server():
 
 
 def get_moisture():
-    moisture_8bit = PFC8591.read_byte(address)  # = i2cget -y 1 0x48
+    moisture_8bit = PFC8591.read_byte(ADC_ADDRESS)  # = i2cget -y 1 0x48
+    moisture_8bit = PFC8591.read_byte(ADC_ADDRESS)  # Read twice since first read is "cached"
     moisture = moisture_8bit * 0.064453125  # convert 8 bit number to moisture 16.5/256 | 16.5V max voltage for 0xff (=3.3V analog output signal)
     return moisture
 
