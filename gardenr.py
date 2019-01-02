@@ -17,7 +17,11 @@ PORT = 443
 PID_FILE = '/tmp/gardenr.pid'
 UPDATE_FILE = '/home/pi/gardenr/www/data.json'
 UPDATE_INTERVAL = 30  # Update every 10 seconds
+ADC_ADDRESS = 0x48
 data = {}
+
+PFC8591 = smbus.SMBus(1)
+PFC8591.write_byte(address, 0x03)  # set channel to AIN3 | = i2cset -y 1 0x48 0x03
 
 
 def run_server():
@@ -31,10 +35,17 @@ def run_server():
     httpd.serve_forever()
 
 
+def get_moisture():
+    moisture_8bit = PFC8591.read_byte(address)  # = i2cget -y 1 0x48
+    moisture = moisture_8bit * 0.064453125  # convert 8 bit number to moisture 16.5/256 | 16.5V max voltage for 0xff (=3.3V analog output signal)
+    return moisture
+
+
 def update_data():
     while True:
         print(datetime.datetime.now(), 'Updating data...')
         data['updated'] = str(time.time())
+        data['moisture'] = str(get_moisture())
         json_data = json.dumps(data)
         with open(UPDATE_FILE, 'w') as fh:
             fh.write(json_data)
@@ -45,10 +56,12 @@ def update_data():
 def update_screen():
     print(datetime.datetime.now(), 'Updating screen...')
     updated_time = str(datetime.datetime.fromtimestamp(float(data['updated'])).strftime('%Y-%m-%d %H:%M:%S'))
-    soil_moisture = 'MOISTURE: N/A'
+    moisture = get_moisture()
+    moisture_lcd = 'MOISTURE:' + str(int(moisture * 1000))
+    print(moisture_lcd)
     my_lcd = I2C_LCD_driver.lcd()
     my_lcd.lcd_display_string(updated_time, 1, 0)
-    my_lcd.lcd_display_string(soil_moisture, 2, 0)
+    my_lcd.lcd_display_string(moisture_lcd, 2, 0)
 
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
 #!/usr/bin/sudo env/bin/python3
 # *-* coding: utf-8 -*-
+# Lifted from: http://www.diyblueprints.net/measuring-voltage-with-raspberry-pi/
 
 import smbus
 import time
