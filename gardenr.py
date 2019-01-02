@@ -18,13 +18,14 @@ PID_FILE = '/tmp/gardenr.pid'
 UPDATE_FILE = '/home/pi/gardenr/www/data.json'
 UPDATE_INTERVAL = 10  # Update every 10 seconds
 data = {}
+httpd = socketserver.TCPServer(('', PORT), Handler)
+my_lcd = I2C_LCD_driver.lcd()
 
 
 def run_server():
     web_dir = os.path.join(os.path.dirname(__file__), 'www')
     os.chdir(web_dir)
     Handler = http.server.SimpleHTTPRequestHandler
-    httpd = socketserver.TCPServer(('', PORT), Handler)
     httpd.socket = ssl.wrap_socket(httpd.socket, certfile='/home/pi/tls/device.pem',
                                     server_side=True)
     print('Running server at port', PORT)
@@ -44,7 +45,6 @@ def update_data():
 
 def update_screen():
     print('Updating screen...')
-    my_lcd = I2C_LCD_driver.lcd()
     updated_time = 'Updated: {}'.format(str(datetime.datetime.fromtimestamp(float(data['updated'])).strftime('%Y-%m-%d %H:%M:%S')))
     soil_moisture = 'Soil Moisture: {}'.format('N/A')
     print(soil_moisture)
@@ -61,7 +61,7 @@ if __name__ == '__main__':
         update_data_thread = multiprocessing.Process(target=update_data)
         update_data_thread.start()
     except KeyboardInterrupt:
-        #httpd.server_close()
+        httpd.server_close()
         #run_server_thread.terminate()
         mylcd.lcd_clear()
         update_data_thread.terminate()
