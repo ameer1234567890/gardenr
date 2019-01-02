@@ -66,8 +66,7 @@ if __name__ == '__main__':
         #run_server_thread.start()
         update_data_thread = multiprocessing.Process(target=update_data)
         update_data_thread.start()
-    except KeyboardInterrupt:
-        print('Exiting...')
+    except:
         httpd.server_close()
         #run_server_thread.terminate()
         mylcd.lcd_clear()
