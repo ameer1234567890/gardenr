@@ -28,13 +28,13 @@ def run_server():
     os.chdir(web_dir)
     httpd.socket = ssl.wrap_socket(httpd.socket, certfile='/home/pi/tls/device.pem',
                                     server_side=True)
-    print('Running server at port', PORT)
+    print('{} Running server at port', PORT).format(datetime.datetime)
     httpd.serve_forever()
 
 
 def update_data():
     while True:
-        print('Updating data...')
+        print('{} Updating data...').format(datetime.datetime)
         data['updated'] = str(time.time())
         json_data = json.dumps(data)
         with open(UPDATE_FILE, 'w') as fh:
@@ -44,7 +44,7 @@ def update_data():
 
 
 def update_screen():
-    print('Updating screen...')
+    print('{} Updating screen...').format(datetime.datetime)
     updated_time = str(datetime.datetime.fromtimestamp(float(data['updated'])).strftime('%Y-%m-%d %H:%M:%S'))
     soil_moisture = 'MOISTURE: N/A'
     my_lcd.lcd_display_string(updated_time, 1, 0)
