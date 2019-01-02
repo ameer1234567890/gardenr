@@ -34,7 +34,7 @@ def run_server():
 
 def update_data():
     while True:
-        print(datetime.datetime, 'Updating data...')
+        print(datetime.datetime.now(), 'Updating data...')
         data['updated'] = str(time.time())
         json_data = json.dumps(data)
         with open(UPDATE_FILE, 'w') as fh:
@@ -44,7 +44,7 @@ def update_data():
 
 
 def update_screen():
-    print(datetime.datetime, 'Updating screen...')
+    print(datetime.datetime.now(), 'Updating screen...')
     updated_time = str(datetime.datetime.fromtimestamp(float(data['updated'])).strftime('%Y-%m-%d %H:%M:%S'))
     soil_moisture = 'MOISTURE: N/A'
     my_lcd.lcd_display_string(updated_time, 1, 0)
