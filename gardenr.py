@@ -46,7 +46,7 @@ def update_data():
     while True:
         print(datetime.datetime.now(), 'Updating data...')
         data['updated'] = str(time.time())
-        data['moisture'] = str(get_moisture())
+        data['moisture'] = str(get_moisture() * 10)
         json_data = json.dumps(data)
         with open(UPDATE_FILE, 'w') as fh:
             fh.write(json_data)
@@ -58,7 +58,7 @@ def update_screen():
     print(datetime.datetime.now(), 'Updating screen...')
     updated_time = str(datetime.datetime.fromtimestamp(float(data['updated'])).strftime('%Y-%m-%d %H:%M:%S'))
     moisture = get_moisture()
-    moisture_lcd = 'MOISTURE:' + str(int(moisture * 10))
+    moisture_lcd = 'MOISTURE:' + str(moisture * 10)
     my_lcd = I2C_LCD_driver.lcd()
     my_lcd.lcd_display_string(updated_time, 1, 0)
     my_lcd.lcd_display_string(moisture_lcd, 2, 0)
