@@ -67,6 +67,7 @@ if __name__ == '__main__':
         update_data_thread = multiprocessing.Process(target=update_data)
         update_data_thread.start()
     except KeyboardInterrupt:
+        print('Exiting...')
         httpd.server_close()
         #run_server_thread.terminate()
         mylcd.lcd_clear()
@@ -75,3 +76,4 @@ if __name__ == '__main__':
         #print('GPIO cleanup done!')
         os.remove(PID_FILE)
         print('PID file removed!')
+        sys.exit(0)
