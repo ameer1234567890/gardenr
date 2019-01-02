@@ -11,6 +11,7 @@ import multiprocessing
 #import RPi.GPIO as GPIO
 import os
 import json
+import I2C_LCD_driver
 
 PORT = 443
 PID_FILE = '/tmp/gardenr.pid'
@@ -37,6 +38,13 @@ def update_data():
         with open(UPDATE_FILE, 'w') as fh:
             fh.write(json_data)
         time.sleep(UPDATE_INTERVAL)
+        update_screen()
+
+
+def update_screen():
+    my_lcd = I2C_LCD_driver.lcd()
+    updated_time = 'Updated: {}'.format(str(time.time()))
+    my_lcd.lcd_display_string(updated_time, 1)
 
 
 if __name__ == '__main__':
