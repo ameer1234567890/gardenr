@@ -44,7 +44,9 @@ def update_data():
 def update_screen():
     my_lcd = I2C_LCD_driver.lcd()
     updated_time = 'Updated: {}'.format(str(time.time()))
-    my_lcd.lcd_display_string(updated_time, 1)
+    soil_moisture = 'Soil Moisture: {}'.format('N/A')
+    my_lcd.lcd_display_string(updated_time, 1, 0)
+    my_lcd.lcd_display_string(soil_moisture, 2, 3)
 
 
 if __name__ == '__main__':
