@@ -21,7 +21,7 @@ ADC_ADDRESS = 0x48
 data = {}
 
 PFC8591 = smbus.SMBus(1)
-PFC8591.write_byte(address, 0x03)  # set channel to AIN3 | = i2cset -y 1 0x48 0x03
+PFC8591.write_byte(ADC_ADDRESS, 0x03)  # set channel to AIN3 | = i2cset -y 1 0x48 0x03
 
 
 def run_server():
