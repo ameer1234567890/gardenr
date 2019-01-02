@@ -48,7 +48,7 @@ def update_screen():
     str_pad = ' ' * 16
     updated_time = str(datetime.datetime.fromtimestamp(float(data['updated'])).strftime('%Y-%m-%d %H:%M:%S'))
     soil_moisture = 'Moisture: N/A'
-    my_lcd.lcd_display_string("updated_time, 1, 0)
+    my_lcd.lcd_display_string(updated_time, 1, 0)
     my_lcd.lcd_display_string(soil_moisture, 2, 0)
     """updated_time = str_pad + updated_time
     while True:
