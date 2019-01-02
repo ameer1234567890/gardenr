@@ -1,0 +1,1 @@
+-e git+https://github.com/pimoroni/py-smbus.git#egg=smbus\&subdirectory=library
