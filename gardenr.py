@@ -17,6 +17,7 @@ PORT = 443
 PID_FILE = '/tmp/gardenr.pid'
 UPDATE_FILE = '/home/pi/gardenr/www/data.json'
 UPDATE_INTERVAL = 10  # Update every 10 seconds
+data = {}
 
 
 def run_server():
@@ -33,7 +34,7 @@ def run_server():
 def update_data():
     while True:
         print('Updating data...')
-        data = {}
+        #data = {}
         data['updated'] = str(time.time())
         json_data = json.dumps(data)
         with open(UPDATE_FILE, 'w') as fh:
@@ -64,6 +65,7 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         httpd.server_close()
         run_server_thread.terminate()
+        mylcd.lcd_clear()
         update_data_thread.terminate()
         #GPIO.cleanup()
         #print('GPIO cleanup done!')
