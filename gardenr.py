@@ -58,7 +58,7 @@ def update_screen():
     print(datetime.datetime.now(), 'Updating screen...')
     updated_time = str(datetime.datetime.fromtimestamp(float(data['updated'])).strftime('%Y-%m-%d %H:%M:%S'))
     moisture = get_moisture()
-    moisture_lcd = 'MOISTURE:' + str(int(moisture * 1000))
+    moisture_lcd = 'MOISTURE:' + str(int(moisture * 10))
     print(moisture_lcd)
     my_lcd = I2C_LCD_driver.lcd()
     my_lcd.lcd_display_string(updated_time, 1, 0)
