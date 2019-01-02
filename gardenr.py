@@ -18,6 +18,7 @@ PID_FILE = '/tmp/gardenr.pid'
 UPDATE_FILE = '/home/pi/gardenr/www/data.json'
 UPDATE_INTERVAL = 10  # Update every 10 seconds
 data = {}
+Handler = http.server.SimpleHTTPRequestHandler
 httpd = socketserver.TCPServer(('', PORT), Handler)
 my_lcd = I2C_LCD_driver.lcd()
 
@@ -25,7 +26,6 @@ my_lcd = I2C_LCD_driver.lcd()
 def run_server():
     web_dir = os.path.join(os.path.dirname(__file__), 'www')
     os.chdir(web_dir)
-    Handler = http.server.SimpleHTTPRequestHandler
     httpd.socket = ssl.wrap_socket(httpd.socket, certfile='/home/pi/tls/device.pem',
                                     server_side=True)
     print('Running server at port', PORT)
