@@ -19,6 +19,16 @@
   <div>Humidity: <span id="humidity">N/A</span></div>
   <div>Air Quality: <span id="airquality">N/A</span></div>
   <script>
+    function humanDate(date) {
+      date = new Date(date);
+      var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return ('0' + date.getDate()).slice(-2) +
+            '-' + monthNames[date.getMonth()] +
+            '-' + date.getFullYear() +
+            ' '  + ('0' + date.getHours()).slice(-2) +
+            ':' + ('0' + date.getMinutes()).slice(-2);
+    }
+
     (function getData() {
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.open('GET', '/data.json', true);
@@ -26,7 +36,7 @@
         if (xmlhttp.readyState == 4) {
           if(xmlhttp.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText);
-            document.getElementById('updated').innerHTML = new Date(obj.updated * 1000);
+            document.getElementById('updated').innerHTML = humanDate(obj.updated * 1000);
             document.getElementById('moisture').innerHTML = obj.moisture;
           }
         }
