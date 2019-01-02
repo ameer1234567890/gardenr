@@ -28,7 +28,7 @@ def run_server():
     os.chdir(web_dir)
     httpd.socket = ssl.wrap_socket(httpd.socket, certfile='/home/pi/tls/device.pem',
                                     server_side=True)
-    print('{} Running server at port', PORT)
+    print(datetime.datetime.now(), 'Running server at port', PORT)
     httpd.serve_forever()
 
 
@@ -55,13 +55,13 @@ if __name__ == '__main__':
     try:
         with open(PID_FILE, 'w') as fh:
             fh.write(str(os.getpid()))
-        #run_server_thread = multiprocessing.Process(target=run_server)
-        #run_server_thread.start()
+        run_server_thread = multiprocessing.Process(target=run_server)
+        run_server_thread.start()
         update_data_thread = multiprocessing.Process(target=update_data)
         update_data_thread.start()
     except:
         httpd.server_close()
-        #run_server_thread.terminate()
+        run_server_thread.terminate()
         mylcd.lcd_clear()
         update_data_thread.terminate()
         #GPIO.cleanup()
