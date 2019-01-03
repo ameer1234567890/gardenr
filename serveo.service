@@ -11,3 +11,12 @@ Restart=on-failure
 RestartSec=3s
 [Install]
 WantedBy=multi-user.target
+
+# Install: sudo cp serveo.service /etc/systemd/system/serveo.service
+# Enable: sudo systemctl enable serveo.service
+# Start: sudo systemctl start serveo.service
+# Status: sudo systemctl status serveo.service
+
+# Stop: sudo systemctl stop serveo.service
+# Disable: sudo systemctl disable serveo.service
+# Uninstall: sudo rm /etc/systemd/system/serveo.service
