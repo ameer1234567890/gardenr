@@ -16,6 +16,7 @@ WantedBy=multi-user.target
 # Enable: sudo systemctl enable serveo.service
 # Start: sudo systemctl start serveo.service
 # Status: sudo systemctl status serveo.service
+# Note: Run the ExecStart command once on a terminal, if setup on a new device
 
 # Stop: sudo systemctl stop serveo.service
 # Disable: sudo systemctl disable serveo.service
