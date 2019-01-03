@@ -2,17 +2,17 @@
 # *-* coding: utf-8 -*-
 """An indoor gardening assistant"""
 
-import http.server
-import socketserver
+import os
 import ssl
 import time
-import datetime
-import multiprocessing
-import os
 import json
-import I2C_LCD_driver
 import smbus
+import datetime
+import http.server
+import socketserver
 import Adafruit_DHT
+import I2C_LCD_driver
+import multiprocessing
 
 PORT = 443
 PID_FILE = '/tmp/gardenr.pid'
