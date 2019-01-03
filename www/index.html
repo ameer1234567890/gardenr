@@ -37,8 +37,8 @@
             var obj = JSON.parse(xmlhttp.responseText);
             document.getElementById('updated').innerHTML = humanDate(obj.updated * 1000);
             document.getElementById('moisture').innerHTML = obj.moisture;
-            document.getElementById('tempurature').innerHTML = obj.temperature;
-            document.getElementById('humidity').innerHTML = Math.round(obj.humidity * 100) / 100;
+            document.getElementById('tempurature').innerHTML = Math.round(obj.temperature * 100) / 100;
+            document.getElementById('humidity').innerHTML = obj.humidity;
           }
         }
       }
