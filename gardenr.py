@@ -12,12 +12,15 @@ import os
 import json
 import I2C_LCD_driver
 import smbus
+import Adafruit_DHT
 
 PORT = 443
 PID_FILE = '/tmp/gardenr.pid'
 UPDATE_FILE = '/home/pi/gardenr/www/data.json'
 UPDATE_INTERVAL = 10  # Update every 10 seconds
 ADC_ADDRESS = 0x48
+DHT_SENSOR = Adafruit_DHT.DHT22
+DHT_PIN = 4
 data = {}
 
 PFC8591 = smbus.SMBus(1)
@@ -42,11 +45,17 @@ def get_moisture():
     return moisture
 
 
+def get_temperature_and_humidity():
+    return Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
+
 def update_data():
     while True:
         print(datetime.datetime.now(), 'Updating data...')
         data['updated'] = str(time.time())
         data['moisture'] = str(get_moisture() * 10)
+        temperature, humidity = get_temperature_and_humidity()
+        data['temperature'] = str(temperature)
+        data['humidity'] = str(humidity)
         json_data = json.dumps(data)
         with open(UPDATE_FILE, 'w') as fh:
             fh.write(json_data)
