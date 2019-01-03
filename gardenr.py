@@ -53,7 +53,7 @@ def update_data():
         print(datetime.datetime.now(), 'Updating data...')
         data['updated'] = str(time.time())
         data['moisture'] = str(get_moisture() * 10)
-        temperature, humidity = get_temperature_and_humidity()
+        humidity, temperature = get_temperature_and_humidity()
         data['temperature'] = str(temperature)
         data['humidity'] = str(humidity)
         json_data = json.dumps(data)
