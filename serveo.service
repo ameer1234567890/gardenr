@@ -1,0 +1,13 @@
+[Unit]
+Description=Serveo service
+After=network.target
+[Service]
+User=pi
+Group=pi
+WorkingDirectory=/home/pi
+ExecStart=/usr/bin/ssh -y -R gardenr:22:localhost:22 serveo.net < /dev/ptmx
+# we may not have network yet, so retry until success
+Restart=on-failure
+RestartSec=3s
+[Install]
+WantedBy=multi-user.target
