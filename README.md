@@ -74,6 +74,6 @@ SCL           -  SCL
 * I2C_LCD_driver: http://www.circuitbasics.com/raspberry-pi-i2c-lcd-set-up-and-programming/
 
 #### Credits
-* Soil Moisture Sensor (Raspberry Pi): https://www.instructables.com/id/Soil-Moisture-Sensor-Raspberry-Pi/
-* How To Setup an I2C LCD on the Raspberry Pi: http://www.circuitbasics.com/raspberry-pi-i2c-lcd-set-up-and-programming/
-* Measuring Voltage with Raspberry Pi: http://www.diyblueprints.net/measuring-voltage-with-raspberry-pi/
+* [Soil Moisture Sensor (Raspberry Pi)](https://www.instructables.com/id/Soil-Moisture-Sensor-Raspberry-Pi/)
+* [How To Setup an I2C LCD on the Raspberry Pi](http://www.circuitbasics.com/raspberry-pi-i2c-lcd-set-up-and-programming/)
+* [Measuring Voltage with Raspberry Pi](http://www.diyblueprints.net/measuring-voltage-with-raspberry-pi/)
