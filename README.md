@@ -71,7 +71,7 @@ SCL           -  SCL
 #### Libraries used
 * smbus: https://github.com/pimoroni/py-smbus
 * Adafruit-DHT: https://github.com/adafruit/Adafruit_Python_DHT
-* I2C_LCD_driver: http://www.circuitbasics.com/raspberry-pi-i2c-lcd-set-up-and-programming/
+* I2C_LCD_driver: https://gist.github.com/DenisFromHR/cc863375a6e19dce359d
 
 #### Credits
 * [Soil Moisture Sensor (Raspberry Pi)](https://www.instructables.com/id/Soil-Moisture-Sensor-Raspberry-Pi/)
