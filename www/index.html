@@ -9,14 +9,26 @@
   <meta name="viewport" content="width=device-width">
   <title>Gardenr</title>
   <meta name="Description" content="An indoor gardening assistant">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
+  <style>
+    body {
+      font-family: 'Roboto Mono', monospace;
+      background-color: #d9e0e7;
+    }
+    .measure {
+      margin: 10px 0;
+      padding-left: 10px;
+      border-left: 5px solid #88af25;
+    }
+  </style>
 </head>
 <body>
   <noscript>JavaScript is disabled!</noscript>
   <h4>Gardenr</h4>
-  <div>Updated: <span id="updated">N/A</span></div>
-  <div>Moisture: <span id="moisture">N/A</span></div>
-  <div>Temperature: <span id="tempurature">N/A</span></div>
-  <div>Humidity: <span id="humidity">N/A</span></div>
+  <div class="measure">Updated: <span id="updated">N/A</span></div>
+  <div class="measure">Moisture: <span id="moisture">N/A</span></div>
+  <div class="measure">Temperature: <span id="tempurature">N/A</span></div>
+  <div class="measure">Humidity: <span id="humidity">N/A</span></div>
   <script>
     function humanDate(date) {
       date = new Date(date);
