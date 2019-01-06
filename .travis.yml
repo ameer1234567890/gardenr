@@ -1,0 +1,11 @@
+language: python
+cache: pip
+python:
+  - 3.5
+  - 3.6
+  - 3.7-dev
+install:
+  - pip install flake8 pep8-naming flake8-bugbear
+  - flake8 --version
+script:
+  - ./tests.sh

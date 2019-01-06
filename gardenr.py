@@ -24,29 +24,36 @@ DHT_PIN = 4
 data = {}
 
 PFC8591 = smbus.SMBus(1)
-PFC8591.write_byte(ADC_ADDRESS, 0x03)  # set channel to AIN3 | = i2cset -y 1 0x48 0x03
+# set channel to AIN3 | = i2cset -y 1 0x48 0x03
+PFC8591.write_byte(ADC_ADDRESS, 0x03)
 
 
 def run_server():
     web_dir = os.path.join(os.path.dirname(__file__), 'www')
     os.chdir(web_dir)
-    Handler = http.server.SimpleHTTPRequestHandler
-    httpd = socketserver.TCPServer(('', PORT), Handler)
-    httpd.socket = ssl.wrap_socket(httpd.socket, certfile='/home/pi/tls/device.pem',
-                                    server_side=True)
+    handler = http.server.SimpleHTTPRequestHandler
+    httpd = socketserver.TCPServer(('', PORT), handler)
+    httpd.socket = ssl.wrap_socket(httpd.socket,
+                                   certfile='/home/pi/tls/device.pem',
+                                   server_side=True)
     print(datetime.datetime.now(), 'Running server at port', PORT)
     httpd.serve_forever()
 
 
 def get_moisture():
-    moisture_8bit = PFC8591.read_byte(ADC_ADDRESS)  # = i2cget -y 1 0x48
-    moisture_8bit = PFC8591.read_byte(ADC_ADDRESS)  # Read twice since first read is "cached"
-    moisture = moisture_8bit * 0.064453125  # convert 8 bit number to moisture 16.5/256 | 16.5V max voltage for 0xff (=3.3V analog output signal)
+    # = i2cget -y 1 0x48
+    moisture_8bit = PFC8591.read_byte(ADC_ADDRESS)
+    # Read twice since first read is "cached"
+    moisture_8bit = PFC8591.read_byte(ADC_ADDRESS)
+    # convert 8 bit number to moisture 16.5/256
+    # 16.5V max voltage for 0xff (=3.3V analog output signal)
+    moisture = moisture_8bit * 0.064453125
     return moisture
 
 
 def get_temperature_and_humidity():
     return Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
+
 
 def update_data():
     while True:
@@ -65,7 +72,8 @@ def update_data():
 
 def update_screen():
     print(datetime.datetime.now(), 'Updating screen...')
-    updated_time = str(datetime.datetime.fromtimestamp(float(data['updated'])).strftime('%Y-%m-%d %H:%M:%S'))
+    updated_time = str(datetime.datetime.fromtimestamp(float(data['updated']))
+                       .strftime('%Y-%m-%d %H:%M:%S'))
     moisture = get_moisture()
     moisture_lcd = 'MOISTURE:' + str(moisture * 10)
     my_lcd = I2C_LCD_driver.lcd()
@@ -81,7 +89,7 @@ if __name__ == '__main__':
         run_server_thread.start()
         update_data_thread = multiprocessing.Process(target=update_data)
         update_data_thread.start()
-    except:
+    except:  # noqa: B001
         run_server_thread.terminate()
         update_data_thread.terminate()
         os.remove(PID_FILE)

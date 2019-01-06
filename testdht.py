@@ -2,7 +2,6 @@
 # *-* coding: utf-8 -*-
 
 import Adafruit_DHT
-import time
 
 DHT_SENSOR = Adafruit_DHT.DHT22
 DHT_PIN = 4
