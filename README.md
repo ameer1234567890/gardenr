@@ -79,3 +79,7 @@ SCL           -  SCL
 * [Soil Moisture Sensor (Raspberry Pi)](https://www.instructables.com/id/Soil-Moisture-Sensor-Raspberry-Pi/)
 * [How To Setup an I2C LCD on the Raspberry Pi](http://www.circuitbasics.com/raspberry-pi-i2c-lcd-set-up-and-programming/)
 * [Measuring Voltage with Raspberry Pi](http://www.diyblueprints.net/measuring-voltage-with-raspberry-pi/)
+
+#### Make Raspberry Pi's root filesystem read-only
+* This is an optional step, which woul reduce chances of filesystem corruption due to improper shutdowns
+* Use code and guide at: https://github.com/janztec/empc-arpi-linux-readonly
