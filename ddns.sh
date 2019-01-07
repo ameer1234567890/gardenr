@@ -51,7 +51,6 @@ while true; do
   RECORD_IP="$($CURL "$API_URL/zones/$ZONE_ID/dns_records/$REC_ID" | sed -e 's/[{}]/\n/g' | sed -e 's/,/\n/g' | grep '"content":"' | cut -d'"' -f4)"
   if [ "$IP" == "$RECORD_IP" ]; then
     $VERBOSE && echo "[$(date)] IP Unchanged"
-    exit 0
   fi
   $VERBOSE && printf "[%s] Setting IP to $IP" "$(date)"
   $CURL -X PUT "$API_URL/zones/$ZONE_ID/dns_records/$REC_ID" --data '{"type":"A","name":"'"$SUBDOMAIN"'","content":"'"$IP"'","proxied":false}' 1>/dev/null
