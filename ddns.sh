@@ -13,6 +13,14 @@
 # shellcheck disable=SC2089
 # shellcheck disable=SC2090
 
+
+EMAIL=''
+TOKEN=''
+DOMAIN=''
+SUBDOMAIN=''
+ZONE_ID=''
+REC_ID=''
+
 # Modification: EMAIL, TOKEN, DOMAIN, SUBDOMAIN, ZONE_ID and REC_ID are defined in the below file
 # for the purpose of not exposing those in VCS
 # shellcheck disable=SC1091
