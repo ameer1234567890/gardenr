@@ -4,7 +4,7 @@ After=network.target
 [Service]
 User=pi
 Group=pi
-WorkingDirectory=/home/pi
+WorkingDirectory=/home/pi/gardenr
 ExecStart=/home/pi/gardenr/ddns.sh
 # we may not have network yet, so retry until success
 Restart=on-failure
