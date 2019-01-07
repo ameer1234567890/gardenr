@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Original Source: https://gist.github.com/lyoshenka/6257440
 # Step 1: Fill in EMAIL, TOKEN, DOMAIN and SUBDOMAIN. Your API token is here: https://www.cloudflare.com/a/account/my-account
@@ -57,7 +57,7 @@ $LOOKUP && exit 0
 while true; do
   IP="$(curl -s http://ipv4.icanhazip.com)"
   RECORD_IP="$($CURL "$API_URL/zones/$ZONE_ID/dns_records/$REC_ID" | sed -e 's/[{}]/\n/g' | sed -e 's/,/\n/g' | grep '"content":"' | cut -d'"' -f4)"
-  if [ "$IP" = "$RECORD_IP" ]; then
+  if [ "$IP" == "$RECORD_IP" ]; then
     $VERBOSE && echo "[$(date)] IP Unchanged"
   else
     $VERBOSE && printf "[%s] Setting IP to $IP" "$(date)"
