@@ -1,0 +1,23 @@
+[Unit]
+Description=DDNS service
+After=network.target
+[Service]
+User=pi
+Group=pi
+WorkingDirectory=/home/pi
+ExecStart=/home/pi/gardenr/ddns.sh
+# we may not have network yet, so retry until success
+Restart=on-failure
+RestartSec=3s
+[Install]
+WantedBy=multi-user.target
+
+# Install: sudo cp ddns.service /etc/systemd/system/ddns.service
+# Enable: sudo systemctl enable ddns.service
+# Start: sudo systemctl start ddns.service
+# Status: sudo systemctl status ddns.service
+# Note: Run the ExecStart command once on a terminal, if setup on a new device
+
+# Stop: sudo systemctl stop ddns.service
+# Disable: sudo systemctl disable ddns.service
+# Uninstall: sudo rm /etc/systemd/system/ddns.service
