@@ -21,6 +21,7 @@ UPDATE_INTERVAL = 10  # Update every 10 seconds
 ADC_ADDRESS = 0x48
 DHT_SENSOR = Adafruit_DHT.DHT22
 DHT_PIN = 4
+URL = 'https://gardenr.ameer.io'
 data = {}
 
 PFC8591 = smbus.SMBus(1)
@@ -38,6 +39,20 @@ def run_server():
                                    server_side=True)
     print(datetime.datetime.now(), 'Running server at port', PORT)
     httpd.serve_forever()
+
+
+class HTTPRedirect(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):  # noqa: N802
+        print(self.path)
+        self.send_response(301)
+        new_path = '%s%s' % (URL, self.path)
+        self.send_header('Location', new_path)
+        self.end_headers()
+
+
+def run_http():
+    # This is to redirect http to https
+    socketserver.TCPServer(('', 80), HTTPRedirect).serve_forever()
 
 
 def get_moisture():
@@ -89,8 +104,11 @@ if __name__ == '__main__':
         run_server_thread.start()
         update_data_thread = multiprocessing.Process(target=update_data)
         update_data_thread.start()
+        run_http_thread = multiprocessing.Process(target=run_http)
+        run_http_thread.start()
     except:  # noqa: B001
         run_server_thread.terminate()
         update_data_thread.terminate()
+        run_http_thread.terminate()
         os.remove(PID_FILE)
         print('PID file removed!')
