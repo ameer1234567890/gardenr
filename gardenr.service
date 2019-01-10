@@ -1,0 +1,22 @@
+[Unit]
+Description=Gardenr service
+After=network.target
+[Service]
+Environment=VIRTUAL_ENV=/home/pi/gardenr/env
+WorkingDirectory=/home/pi/gardenr
+ExecStart=/usr/bin/sudo /home/pi/gardenr/env/bin/python3 /home/pi/gardenr/gardenr.py
+# we may not have network yet, so retry until success
+Restart=on-failure
+RestartSec=3s
+[Install]
+WantedBy=multi-user.target
+
+# Install: sudo cp gardenr.service /etc/systemd/system/gardenr.service
+# Enable: sudo systemctl enable gardenr.service
+# Start: sudo systemctl start gardenr.service
+# Status: sudo systemctl status gardenr.service
+# Note: Run the ExecStart command once on a terminal, if setup on a new device
+
+# Stop: sudo systemctl stop gardenr.service
+# Disable: sudo systemctl disable gardenr.service
+# Uninstall: sudo rm /etc/systemd/system/gardenr.service
