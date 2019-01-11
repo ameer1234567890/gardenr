@@ -1,2 +1,3 @@
 Adafruit-DHT==1.4.0
+requests==2.21.0
 -e git+https://github.com/pimoroni/py-smbus.git@28f25900a2a2f94d8181ce98a7fa6c7f526555e3#egg=smbus\&subdirectory=library
