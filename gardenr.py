@@ -97,7 +97,7 @@ def notify_moisture(moisture):
                 maker_url = 'https://maker.ifttt.com/trigger/' + \
                             'soil_moisture/with/key/'
                 maker_url = maker_url + Config.IFTTT_KEY  # noqa: F821
-                maker_url = maker_url + '?value1=' + moisture
+                maker_url = maker_url + '?value1=' + str(moisture)
                 r = requests.get(maker_url)
                 print(r.text)
                 with open(NOTIFY_FILE, 'w') as fh:
