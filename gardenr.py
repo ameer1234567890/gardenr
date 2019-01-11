@@ -90,7 +90,7 @@ def get_temperature_and_humidity():
 def notify_moisture(moisture):
     if NOTIFY_MOISTURE_LEVEL != 0 and Config.IFTTT_KEY:  # noqa: F821
         if moisture < NOTIFY_MOISTURE_LEVEL:
-            with open(LOG_FILE, 'r') as fh:
+            with open(NOTIFY_FILE, 'r') as fh:
                 notified = str(fh.read())
             if notified == 'NO':
                 print('Low moisture level detected! Notifying...')
