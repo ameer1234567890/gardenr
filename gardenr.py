@@ -8,11 +8,13 @@ import time
 import json
 import smbus
 import datetime
+import requests
 import http.server
 import socketserver
 import Adafruit_DHT
 import I2C_LCD_driver
 import multiprocessing
+
 
 PORT = 443
 PID_FILE = '/tmp/gardenr.pid'
@@ -22,7 +24,16 @@ ADC_ADDRESS = 0x48
 DHT_SENSOR = Adafruit_DHT.DHT22
 DHT_PIN = 4
 URL = 'https://gardenr.ameer.io'
+NOTIFY_MOISTURE_LEVEL = 70  # Set to 0 to disable notifications
 data = {}
+
+
+if NOTIFY_MOISTURE_LEVEL != 0:
+    try:
+        exec(open('/home/pi/ifttt.conf.py').read())
+    except:  # noqa: B001
+        print('Config file not found')
+
 
 PFC8591 = smbus.SMBus(1)
 # set channel to AIN3 | = i2cset -y 1 0x48 0x03
@@ -70,11 +81,24 @@ def get_temperature_and_humidity():
     return Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
 
 
+def notify_moisture(moisture):
+    if NOTIFY_MOISTURE_LEVEL != 0 and Config.IFTTT_KEY:  # noqa: F821
+        if moisture < NOTIFY_MOISTURE_LEVEL:
+            print('Low moisture level detected! Notifying...')
+            maker_url = 'https://maker.ifttt.com/trigger/' + \
+                        'soil_moisture/with/key/'
+            maker_url = maker_url + Config.IFTTT_KEY  # noqa: F821
+            maker_url = maker_url + '?value1=' + moisture
+            r = requests.get(maker_url)
+            print(r.text)
+
+
 def update_data():
     while True:
         print(datetime.datetime.now(), 'Updating data...')
+        moisture = get_moisture() * 10
         data['updated'] = str(time.time())
-        data['moisture'] = str(get_moisture() * 10)
+        data['moisture'] = str(moisture)
         humidity, temperature = get_temperature_and_humidity()
         data['temperature'] = str(temperature)
         data['humidity'] = str(humidity)
@@ -82,6 +106,7 @@ def update_data():
         with open(UPDATE_FILE, 'w') as fh:
             fh.write(json_data)
         update_screen()
+        notify_moisture(moisture)
         time.sleep(UPDATE_INTERVAL)
 
 
