@@ -24,7 +24,7 @@ ADC_ADDRESS = 0x48
 DHT_SENSOR = Adafruit_DHT.DHT22
 DHT_PIN = 4
 URL = 'https://gardenr.ameer.io'
-NOTIFY_MOISTURE_LEVEL = 120  # Set to 0 to disable notifications
+NOTIFY_MOISTURE_LEVEL = 70  # Set to 0 to disable notifications
 NOTIFY_FILE = '/home/pi/gardenr.notify'
 data = {}
 
