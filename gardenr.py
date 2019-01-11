@@ -24,7 +24,8 @@ ADC_ADDRESS = 0x48
 DHT_SENSOR = Adafruit_DHT.DHT22
 DHT_PIN = 4
 URL = 'https://gardenr.ameer.io'
-NOTIFY_MOISTURE_LEVEL = 70  # Set to 0 to disable notifications
+NOTIFY_MOISTURE_LEVEL = 120  # Set to 0 to disable notifications
+NOTIFY_FILE = '/home/pi/gardenr.notify'
 data = {}
 
 
@@ -33,6 +34,11 @@ if NOTIFY_MOISTURE_LEVEL != 0:
         exec(open('/home/pi/ifttt.conf.py').read())
     except:  # noqa: B001
         print('Config file not found')
+
+
+if not os.path.isfile(NOTIFY_FILE):
+        with open(NOTIFY_FILE, 'w') as fh:
+            fh.write('NO')
 
 
 PFC8591 = smbus.SMBus(1)
@@ -84,13 +90,23 @@ def get_temperature_and_humidity():
 def notify_moisture(moisture):
     if NOTIFY_MOISTURE_LEVEL != 0 and Config.IFTTT_KEY:  # noqa: F821
         if moisture < NOTIFY_MOISTURE_LEVEL:
-            print('Low moisture level detected! Notifying...')
-            maker_url = 'https://maker.ifttt.com/trigger/' + \
-                        'soil_moisture/with/key/'
-            maker_url = maker_url + Config.IFTTT_KEY  # noqa: F821
-            maker_url = maker_url + '?value1=' + moisture
-            r = requests.get(maker_url)
-            print(r.text)
+            with open(LOG_FILE, 'r') as fh:
+                notified = str(fh.read())
+            if notified == 'NO':
+                print('Low moisture level detected! Notifying...')
+                maker_url = 'https://maker.ifttt.com/trigger/' + \
+                            'soil_moisture/with/key/'
+                maker_url = maker_url + Config.IFTTT_KEY  # noqa: F821
+                maker_url = maker_url + '?value1=' + moisture
+                r = requests.get(maker_url)
+                print(r.text)
+                with open(NOTIFY_FILE, 'w') as fh:
+                    fh.write('YES')
+            else:
+                print('Low moisture level detected! Notified already!')
+        if moisture > NOTIFY_MOISTURE_LEVEL:
+            with open(NOTIFY_FILE, 'w') as fh:
+                fh.write('NO')
 
 
 def update_data():
