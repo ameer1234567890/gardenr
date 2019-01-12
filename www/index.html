@@ -20,6 +20,10 @@
       padding-left: 10px;
       border-left: 5px solid #88af25;
     }
+    .update {
+      color: #88af25;
+      transition: ease 1s;
+    }
     footer {
       position: fixed;
       bottom: 0;
@@ -60,6 +64,8 @@
           if(xmlhttp.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText);
             document.getElementById('updated').innerHTML = humanDate(obj.updated * 1000);
+            document.getElementById('updated').classList.add('update');
+            setTimeout(function(){document.getElementById('updated').classList.remove('update');}, 1500);
             document.getElementById('moisture').innerHTML = obj.moisture;
             document.getElementById('tempurature').innerHTML = Math.round(obj.temperature * 100) / 100;
             document.getElementById('humidity').innerHTML = obj.humidity;
