@@ -19,9 +19,8 @@ An indoor gardening assistant
 * Note: `./testdht.py`, `./testlcd.py` and `./testmoisture.py` are test scripts which are used for testing individual sensors.
 
 #### TODO
-* Polish web frontend.
 * Make a PCB to accomodate all sensors and the ADC.
-* Implement notifications (IFTTT?) when moisture level goes below a limit.
+* Make notify threshold configurable via web interface. Currently a bit tricky since the Pi is running read-only.
 
 #### Components Used
 * Raspberry Pi 3B+
