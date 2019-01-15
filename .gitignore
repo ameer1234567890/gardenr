@@ -2,3 +2,5 @@ env
 www/data.json
 __pycache__
 .vscode
+config.json
+notify.log

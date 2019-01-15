@@ -2,6 +2,12 @@
 # *-* coding: utf-8 -*-
 """An indoor gardening assistant"""
 
+# Setup config file at /home/pi/ifttt.conf.py as below:
+# class Config():
+#    IFTTT_KEY = 'YOUR_IFTTT_WEBHOOK_KEY_HERE'
+#    NOTIFY_MOISTURE_LEVEL = 0  # Set to 0 to disable notifications
+
+
 import os
 import ssl
 import time
@@ -18,22 +24,17 @@ import multiprocessing
 
 PORT = 443
 PID_FILE = '/tmp/gardenr.pid'
-UPDATE_FILE = '/home/pi/gardenr/www/data.json'
+UPDATE_FILE = './www/data.json'
 UPDATE_INTERVAL = 10  # Update every 10 seconds
 ADC_ADDRESS = 0x48
 DHT_SENSOR = Adafruit_DHT.DHT22
 DHT_PIN = 4
 URL = 'https://gardenr.ameer.io'
-NOTIFY_MOISTURE_LEVEL = 70  # Set to 0 to disable notifications
-NOTIFY_FILE = '/home/pi/gardenr.notify'
+NOTIFY_FILE = './notify.log'
+CONFIG_FILE = './config.json'
 data = {}
-
-
-if NOTIFY_MOISTURE_LEVEL != 0:
-    try:
-        exec(open('/home/pi/ifttt.conf.py').read())
-    except:  # noqa: B001
-        print('Config file not found')
+ifttt_key = ''
+notify_moisture_level = ''
 
 
 if not os.path.isfile(NOTIFY_FILE):
@@ -44,6 +45,29 @@ if not os.path.isfile(NOTIFY_FILE):
 PFC8591 = smbus.SMBus(1)
 # set channel to AIN3 | = i2cset -y 1 0x48 0x03
 PFC8591.write_byte(ADC_ADDRESS, 0x03)
+
+
+def check_config_file():
+    if not os.path.isfile(CONFIG_FILE):
+        write_config()
+        print('New config file created!')
+
+
+def read_config():
+    global ifttt_key
+    global notify_moisture_level
+    with open(CONFIG_FILE) as fh:
+        config = json.load(fh)
+    ifttt_key = config['IFTTT_KEY']
+    notify_moisture_level = config['NOTIFY_MOISTURE_LEVEL']
+
+
+def write_config(c_ifttt_key='NONE', c_notify_moisture_level='0'):
+    config = {}
+    config['IFTTT_KEY'] = c_ifttt_key
+    config['NOTIFY_MOISTURE_LEVEL'] = c_notify_moisture_level
+    with open(CONFIG_FILE, 'w') as fh:
+        json.dump(config, fh)
 
 
 def run_server():
@@ -88,15 +112,15 @@ def get_temperature_and_humidity():
 
 
 def notify_moisture(moisture):
-    if NOTIFY_MOISTURE_LEVEL != 0 and Config.IFTTT_KEY:  # noqa: F821
-        if moisture < NOTIFY_MOISTURE_LEVEL:
+    if Config.NOTIFY_MOISTURE_LEVEL != 0 and ifttt_key:  # noqa: F821
+        if moisture > int(notify_moisture_level):
             with open(NOTIFY_FILE, 'r') as fh:
                 notified = str(fh.read())
             if notified == 'NO':
                 print('Low moisture level detected! Notifying...')
                 maker_url = 'https://maker.ifttt.com/trigger/' + \
                             'soil_moisture/with/key/'
-                maker_url = maker_url + Config.IFTTT_KEY  # noqa: F821
+                maker_url = maker_url + ifttt_key  # noqa: F821
                 maker_url = maker_url + '?value1=' + str(moisture)
                 r = requests.get(maker_url)
                 print(r.text)
@@ -104,7 +128,7 @@ def notify_moisture(moisture):
                     fh.write('YES')
             else:
                 print('Low moisture level detected! Notified already!')
-        if moisture > NOTIFY_MOISTURE_LEVEL:
+        else:
             with open(NOTIFY_FILE, 'w') as fh:
                 fh.write('NO')
 
@@ -141,6 +165,8 @@ if __name__ == '__main__':
     try:
         with open(PID_FILE, 'w') as fh:
             fh.write(str(os.getpid()))
+        check_config_file()
+        read_config()
         run_server_thread = multiprocessing.Process(target=run_server)
         run_server_thread.start()
         update_data_thread = multiprocessing.Process(target=update_data)
