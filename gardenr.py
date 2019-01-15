@@ -2,11 +2,6 @@
 # *-* coding: utf-8 -*-
 """An indoor gardening assistant"""
 
-# Setup config file at /home/pi/ifttt.conf.py as below:
-# class Config():
-#    IFTTT_KEY = 'YOUR_IFTTT_WEBHOOK_KEY_HERE'
-#    NOTIFY_MOISTURE_LEVEL = 0  # Set to 0 to disable notifications
-
 
 import os
 import ssl
