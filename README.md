@@ -7,6 +7,7 @@ An indoor gardening assistant
 * When `./gardenr.py` is run, it reads temperature, humidity and soil moisture level.
 * It then updates these values to `./www/data.json` for later use by web frontend.
 * It then updates the 15x2 LCD with the current time and soil moisture level.
+* A preset moisture threshold is compared against the moisture level, and a notification is sent via IFTTT if soil is drier than the threshold.
 * A python web server is then run with root `./www/`.
 * The resulting frontend uses Javascript to query updated sensor data using AJAX.
 * Now, all the collected data can be accessed by reaching `https://localhost` or Raspberry Pi's hostname.
