@@ -75,7 +75,7 @@
             setTimeout(function(){document.getElementById('updated').classList.remove('update');}, 1500);
             document.getElementById('moisture').innerHTML = roundToTwoDec(obj.moisture);
             document.getElementById('tempurature').innerHTML = roundToTwoDec(obj.temperature) + '°C';
-            document.getElementById('humidity').innerHTML = roundToTwoDec(obj.humidity) / 100 + '%';
+            document.getElementById('humidity').innerHTML = roundToTwoDec(obj.humidity) + '%';
           }
         }
       }
