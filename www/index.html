@@ -57,7 +57,10 @@
     }
 
     function roundToTwoDec(number) {
-      return Math.round(number * 100) / 100
+      if (!decimals) decimals = 2;
+      number = Math.round(number * 100) / 100
+      var d = Math.pow(10,decimals);
+      return (parseInt(number*d)/d).toFixed(decimals);
     }
 
     (function getData() {
