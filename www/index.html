@@ -67,8 +67,8 @@
             document.getElementById('updated').classList.add('update');
             setTimeout(function(){document.getElementById('updated').classList.remove('update');}, 1500);
             document.getElementById('moisture').innerHTML = obj.moisture;
-            document.getElementById('tempurature').innerHTML = Math.round(obj.temperature * 100) / 100;
-            document.getElementById('humidity').innerHTML = obj.humidity;
+            document.getElementById('tempurature').innerHTML = Math.round(obj.temperature * 100) / 100 + '°C';
+            document.getElementById('humidity').innerHTML = obj.humidity + '%';
           }
         }
       }
