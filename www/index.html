@@ -56,7 +56,7 @@
             ':' + ('0' + date.getSeconds()).slice(-2);
     }
 
-    function roundToTwoDec(number) {
+    function roundToTwoDec(number, decimals) {
       if (!decimals) decimals = 2;
       number = Math.round(number * 100) / 100
       var d = Math.pow(10,decimals);
