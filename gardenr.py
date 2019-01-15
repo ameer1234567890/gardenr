@@ -112,7 +112,7 @@ def get_temperature_and_humidity():
 
 
 def notify_moisture(moisture):
-    if Config.NOTIFY_MOISTURE_LEVEL != 0 and ifttt_key:  # noqa: F821
+    if int(notify_moisture_level) != 0 and ifttt_key:
         if moisture > int(notify_moisture_level):
             with open(NOTIFY_FILE, 'r') as fh:
                 notified = str(fh.read())
@@ -120,7 +120,7 @@ def notify_moisture(moisture):
                 print('Low moisture level detected! Notifying...')
                 maker_url = 'https://maker.ifttt.com/trigger/' + \
                             'soil_moisture/with/key/'
-                maker_url = maker_url + ifttt_key  # noqa: F821
+                maker_url = maker_url + ifttt_key
                 maker_url = maker_url + '?value1=' + str(moisture)
                 r = requests.get(maker_url)
                 print(r.text)
