@@ -56,6 +56,10 @@
             ':' + ('0' + date.getSeconds()).slice(-2);
     }
 
+    function roundToTwoDec(number) {
+      return Math.round(number * 100) / 100
+    }
+
     (function getData() {
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.open('GET', '/data.json', true);
@@ -66,9 +70,9 @@
             document.getElementById('updated').innerHTML = humanDate(obj.updated * 1000);
             document.getElementById('updated').classList.add('update');
             setTimeout(function(){document.getElementById('updated').classList.remove('update');}, 1500);
-            document.getElementById('moisture').innerHTML = Math.round(obj.moisture * 100) / 100;
-            document.getElementById('tempurature').innerHTML = Math.round(obj.temperature * 100) / 100 + '°C';
-            document.getElementById('humidity').innerHTML = obj.humidity + '%';
+            document.getElementById('moisture').innerHTML = roundToTwoDec(obj.moisture);
+            document.getElementById('tempurature').innerHTML = roundToTwoDec(obj.temperature) + '°C';
+            document.getElementById('humidity').innerHTML = roundToTwoDec(obj.humidity) / 100 + '%';
           }
         }
       }
@@ -77,8 +81,7 @@
     })();
 
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-      .then((registration) => {
+      navigator.serviceWorker.register('/sw.js').then((registration) => {
         console.log('[SW] Service worker is all cool.');
       }).catch(function(e) {
         console.error('[SW] Service worker is not so cool.', e);
