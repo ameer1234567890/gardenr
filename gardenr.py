@@ -8,6 +8,7 @@ import ssl
 import time
 import json
 import smbus
+import sht21
 import datetime
 import requests
 import http.server
@@ -23,6 +24,8 @@ UPDATE_FILE = './www/data.json'
 UPDATE_INTERVAL = 10  # Update every 10 seconds
 ADC_ADDRESS = 0x48
 DHT_SENSOR = Adafruit_DHT.DHT22
+PFC8591 = smbus.SMBus(1)
+SHT21 = sht21.SHT21()
 DHT_PIN = 4
 URL = 'https://gardenr.ameer.io'
 NOTIFY_FILE = './notify.log'
@@ -37,7 +40,6 @@ if not os.path.isfile(NOTIFY_FILE):
             fh.write('NO')
 
 
-PFC8591 = smbus.SMBus(1)
 # set channel to AIN3 | = i2cset -y 1 0x48 0x03
 PFC8591.write_byte(ADC_ADDRESS, 0x03)
 
@@ -104,6 +106,7 @@ def get_moisture():
 
 def get_temperature_and_humidity():
     return Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
+    # return temperature, humidity = SHT21.measure(1)
 
 
 def notify_moisture(moisture):
