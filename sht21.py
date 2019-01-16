@@ -2,6 +2,8 @@
 # -*- coding: UTF-8 -*-
 # flake8: noqa
 
+# Original Source: https://github.com/Tronde/Raspi-SHT21
+
 # Copyright (c) 2015 Martin Steppuhn, www.emsystech.de. All rights reserved.
 #
 # Redistribution and use in source and binary, must retain the above copyright notice, and the following disclaimer.
