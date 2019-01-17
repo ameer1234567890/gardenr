@@ -12,21 +12,29 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
   <style>
     body {
-      font-family: 'Roboto Mono', monospace;
       background-color: #d9e0e7;
+      font-family: 'Roboto Mono', monospace;
     }
     .measure {
+      border-left: 5px solid #88af25;
       margin: 10px 0;
       padding-left: 10px;
-      border-left: 5px solid #88af25;
     }
     .update {
       color: #88af25;
       transition: ease 1s;
     }
+    input[type='submit'] {
+      display: none;
+    }
+    label > svg {
+      cursor: pointer;
+      fill: #009688;
+      vertical-align: middle;
+    }
     footer {
-      position: fixed;
       bottom: 0;
+      position: fixed;
     }
   </style>
 </head>
@@ -37,6 +45,16 @@
   <div class="measure">Moisture: <span id="moisture">N/A</span></div>
   <div class="measure">Temperature: <span id="tempurature">N/A</span></div>
   <div class="measure">Humidity: <span id="humidity">N/A</span></div>
+  <div class="measure">Notification Threshold: 
+    <input type="number" id="threshold" min="1" max="200"> 
+    <label>
+      <input type="submit" id="save">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path fill="none" d="M0 0h24v24H0V0z"></path>
+        <path d="M4.01 6.03l7.51 3.22-7.52-1 .01-2.22m7.5 8.72L4 17.97v-2.22l7.51-1M2.01 3L2 10l15 2-15 2 .01 7L23 12 2.01 3z"></path>
+      </svg>
+    </label>
+  </div>
   <footer>
     <a href="https://github.com/ameer1234567890/gardenr" aria-label="Source Code">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -82,6 +100,44 @@
       xmlhttp.send(null);
       setTimeout(getData, 10000);
     })();
+
+    btnSubmit = document.getElementById('save');
+    submitSvg = document.querySelector('label > svg');
+    threshold = document.getElementById('threshold').value;
+    btnSubmit.addEventListener('click', function(event) {
+      event.preventDefault;
+      if (isNaN(threshold)) {
+        console.log('Threshold is not a number!');
+        threshold.style.backgroundColor = '#f44336';
+        setTimeout(function(){
+          threshold.style.backgroundColor = '#ffffff';
+        }, 1000);
+      } else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open('GET', '/set-threshold', true);
+        xmlhttp.onreadystatechange = function() {
+          if (xmlhttp.readyState == 4) {
+            if(xmlhttp.status == 200) {
+              threshold.style.backgroundColor = '#4caf50';
+              setTimeout(function(){
+                threshold.style.backgroundColor = '#ffffff';
+              }, 1000);
+            } else {
+              threshold.style.backgroundColor = '#f44336';
+              setTimeout(function(){
+                threshold.style.backgroundColor = '#ffffff';
+              }, 1000);
+            }
+          } else {
+            threshold.style.backgroundColor = '#f44336';
+            setTimeout(function(){
+              threshold.style.backgroundColor = '#ffffff';
+            }, 1000);
+          }
+        }
+        xmlhttp.send(null);
+      }
+    });
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').then((registration) => {
