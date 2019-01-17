@@ -101,12 +101,10 @@
       setTimeout(getData, 10000);
     })();
 
-    btnSubmit = document.getElementById('save');
-    submitSvg = document.querySelector('label > svg');
-    threshold = document.getElementById('threshold').value;
-    btnSubmit.addEventListener('click', function(event) {
+    document.getElementById('save').addEventListener('click', function(event) {
       event.preventDefault;
-      if (isNaN(threshold)) {
+      threshold = document.getElementById('threshold');
+      if (isNaN(threshold.value) || threshold.value == '') {
         console.log('Threshold is not a number!');
         threshold.style.backgroundColor = '#f44336';
         setTimeout(function(){
@@ -114,7 +112,8 @@
         }, 1000);
       } else {
         var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open('GET', '/set-threshold', true);
+        xmlhttp.open('POST', '/set-threshold', true);
+        xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xmlhttp.onreadystatechange = function() {
           if (xmlhttp.readyState == 4) {
             if(xmlhttp.status == 200) {
@@ -135,7 +134,7 @@
             }, 1000);
           }
         }
-        xmlhttp.send(null);
+        xmlhttp.send('threshold=' + threshold.value);
       }
     });
 
