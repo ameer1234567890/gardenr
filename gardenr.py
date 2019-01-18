@@ -48,7 +48,7 @@ PFC8591.write_byte(ADC_ADDRESS, 0x03)
 def check_config_file():
     if not os.path.isfile(CONFIG_FILE):
         write_config()
-        print('New config file created!')
+        print(datetime.datetime.now(), 'New config file created!')
 
 
 def read_config():
@@ -79,7 +79,9 @@ class HTTPSHandler(http.server.SimpleHTTPRequestHandler):
                 threshold = str(threshold_field).split('\'')[1]
                 write_config(c_notify_moisture_level=threshold)
                 notify_moisture_level = threshold
-                print(notify_moisture_level)
+                print(datetime.datetime.now(),
+                      'Notify threshold set to {}'
+                      .format(notify_moisture_level))
                 self.send_response(200)
                 self.send_header('Content-type', 'text/html')
                 self.wfile.write('Posted'.encode('utf-8'))
@@ -140,7 +142,8 @@ def notify_moisture(moisture):
             with open(NOTIFY_FILE, 'r') as fh:
                 notified = str(fh.read())
             if notified == 'NO':
-                print('Low moisture level detected! Notifying...')
+                print(datetime.datetime.now(),
+                      'Low moisture level detected! Notifying...')
                 maker_url = 'https://maker.ifttt.com/trigger/' + \
                             'soil_moisture/with/key/'
                 maker_url = maker_url + ifttt_key
@@ -150,7 +153,8 @@ def notify_moisture(moisture):
                 with open(NOTIFY_FILE, 'w') as fh:
                     fh.write('YES')
             else:
-                print('Low moisture level detected! Notified already!')
+                print(datetime.datetime.now(),
+                      'Low moisture level detected! Notified already!')
         else:
             with open(NOTIFY_FILE, 'w') as fh:
                 fh.write('NO')
