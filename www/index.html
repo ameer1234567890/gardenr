@@ -109,8 +109,8 @@
     async function takeBreak() {
       console.log('Clearing timeout for getData!');
       clearTimeout(tGetData);
-      console.log('Waiting for 10 seconds since we do not need a flash of old threshold!');
-      await sleep(10000);
+      console.log('Waiting for 20 seconds since we do not need a flash of old threshold!');
+      await sleep(20000);
       console.log('Break is over!');
       getData();
     }
