@@ -64,7 +64,7 @@
     </a>
   </footer>
   <script>
-    var newThreashold = '';
+    var newThreshold = '';
 
     function humanDate(date) {
       date = new Date(date);
@@ -95,8 +95,8 @@
           document.getElementById('moisture').innerHTML = roundToTwoDec(obj.moisture);
           document.getElementById('tempurature').innerHTML = roundToTwoDec(obj.temperature) + '°C';
           document.getElementById('humidity').innerHTML = roundToTwoDec(obj.humidity) + '%';
-          if (newThreashold != '') {
-            document.getElementById('threshold').value = newThreashold;
+          if (newThreshold != '') {
+            document.getElementById('threshold').value = newThreshold;
           } else {
             document.getElementById('threshold').value = obj.threshold;
           }
@@ -109,8 +109,8 @@
     document.getElementById('save').addEventListener('click', function(event) {
       event.preventDefault;
       threshold = document.getElementById('threshold');
-      newThreashold = threshold.value;
-      if (isNaN(newThreashold) || newThreashold == '') {
+      newThreshold = threshold.value;
+      if (isNaN(newThreshold) || newThreshold == '') {
         console.log('Threshold is not a number!');
         threshold.style.backgroundColor = '#f44336';
         setTimeout(function(){
@@ -126,8 +126,10 @@
             setTimeout(function(){
               threshold.style.backgroundColor = '#ffffff';
             }, 1000);
+            console.log('Locking threshold for 30 seconds...');
             setTimeout(function(){
-              newThreashold = '';
+              newThreshold = '';
+              console.log('Threshold lock released!');
             }, 30000);
           } else {
             threshold.style.backgroundColor = '#f44336';
@@ -136,7 +138,7 @@
             }, 1000);
           }
         }
-        xmlhttp.send('threshold=' + newThreashold);
+        xmlhttp.send('threshold=' + newThreshold);
       }
     });
 
