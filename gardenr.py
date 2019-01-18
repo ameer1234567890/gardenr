@@ -70,7 +70,6 @@ def write_config(c_ifttt_key='NONE', c_notify_moisture_level='0'):
 
 class HTTPSHandler(http.server.BaseHTTPRequestHandler):
     def do_POST(self):  # noqa: N802
-        self.send_header('Content-type', 'text/html')
         if self.path == '/set-threshold':
             length = int(self.headers.get('content-length'))
             field_data = self.rfile.read(length)
@@ -80,23 +79,38 @@ class HTTPSHandler(http.server.BaseHTTPRequestHandler):
                 threshold = str(threshold_field).split('\'')[1]
                 write_config(c_notify_moisture_level=threshold)
                 self.send_response(200)
+                self.send_header('Content-type', 'text/html')
                 self.wfile.write('Posted'.encode('utf-8'))
             else:
                 self.send_response(400)
+                self.send_header('Content-type', 'text/html')
                 self.wfile.write('Bad Request!'.encode('utf-8'))
 
     def do_GET(self):  # noqa: N802
-        self.send_header('Content-type', 'text/html')
+        mime = {}
+        mime['.html'] = 'text/html'
+        mime['.png'] = 'image/png'
+        mime['.svg'] = 'image/svg+xml'
+        mime['.json'] = 'application/json'
+        mime['.webmanifest'] = 'application/manifest+json'
+        mime['.js'] = 'text/javascript'
         file_path = './www' + self.path
+        ext = os.path.splitext(file_path)[1]
+        if ext is None:
+            ext = '.html'
+        if file_path == './www/':
+            file_path = './www/index.html'
         if os.path.isfile(file_path):
             self.send_response(200)
+            self.send_header('Content-type', mime[ext])
             fh = open(file_path, 'r')
-            self.wfile.write(fh.read().encode('utf-8'))
-        elif file_path == './www/':
-            self.send_response(200)
-            self.wfile.write('Hello'.encode('utf-8'))
+            if mime[ext] == 'png':
+                self.wfile.write(fh.read())
+            else:
+                self.wfile.write(fh.read().encode('utf-8'))
         else:
             self.send_response(404)
+            self.send_header('Content-type', 'text/html')
             self.wfile.write('File not found!'.encode('utf-8'))
 
 
