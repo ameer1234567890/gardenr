@@ -85,10 +85,12 @@ class HTTPSHandler(http.server.SimpleHTTPRequestHandler):
                       .format(notify_moisture_level))
                 self.send_response(200)
                 self.send_header('Content-type', 'text/html')
+                self.end_headers()
                 self.wfile.write('Posted'.encode('utf-8'))
             else:
                 self.send_response(400)
                 self.send_header('Content-type', 'text/html')
+                self.end_headers()
                 self.wfile.write('Bad Request!'.encode('utf-8'))
 
     def do_GET(self):  # noqa: N802
