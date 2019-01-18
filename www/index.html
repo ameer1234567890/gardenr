@@ -87,7 +87,7 @@
       return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    (function getData() {
+    function getData() {
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.open('GET', '/data.json', true);
       xmlhttp.onreadystatechange = function() {
@@ -104,7 +104,7 @@
       }
       xmlhttp.send(null);
       tGetData = setTimeout(getData, 10000);
-    })();
+    }
 
     async function takeBreak() {
       console.log('Clearing timeout for getData!');
@@ -112,8 +112,10 @@
       console.log('Waiting for 10 seconds since we do not need a flash of old threshold!');
       await sleep(10000);
       console.log('Break is over!');
-      getData;
+      getData();
     }
+
+    getData();
 
     document.getElementById('save').addEventListener('click', function(event) {
       event.preventDefault;
