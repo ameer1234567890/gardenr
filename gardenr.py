@@ -96,6 +96,7 @@ class HTTPSHandler(http.server.BaseHTTPRequestHandler):
         mime['.js'] = 'text/javascript'
         file_path = './www' + self.path
         ext = os.path.splitext(file_path)[1]
+        print(file_path)
         print(ext)
         if ext is None:
             print('here we go')
