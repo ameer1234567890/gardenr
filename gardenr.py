@@ -108,7 +108,7 @@ class HTTPSHandler(http.server.BaseHTTPRequestHandler):
                     self.wfile.write(fh.read())
             elif ext == '.js':
                 print('OK')
-                self.send_header('Content-type', 'text/javascript')
+                self.send_header("Content-type", "text/javascript")
                 with open(file_path, 'r') as fh:
                     self.wfile.write(fh.read().encode('utf-8'))
             else:
