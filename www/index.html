@@ -113,6 +113,8 @@
       await sleep(30000);
       console.log('Break is over!');
       getData();
+      clearTimeout(tGetData);
+      getData();
     }
 
     getData();
