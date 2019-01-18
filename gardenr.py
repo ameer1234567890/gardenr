@@ -78,6 +78,7 @@ class HTTPSHandler(http.server.SimpleHTTPRequestHandler):
             if threshold_field is not None:
                 threshold = str(threshold_field).split('\'')[1]
                 write_config(c_notify_moisture_level=threshold)
+                notify_moisture_level = threshold
                 self.send_response(200)
                 self.send_header('Content-type', 'text/html')
                 self.wfile.write('Posted'.encode('utf-8'))
