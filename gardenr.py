@@ -13,6 +13,7 @@ import datetime
 import requests
 import http.server
 import socketserver
+import urllib.parse
 import Adafruit_DHT
 import I2C_LCD_driver
 import multiprocessing
@@ -36,8 +37,8 @@ notify_moisture_level = ''
 
 
 if not os.path.isfile(NOTIFY_FILE):
-        with open(NOTIFY_FILE, 'w') as fh:
-            fh.write('NO')
+    with open(NOTIFY_FILE, 'w') as fh:
+        fh.write('NO')
 
 
 # set channel to AIN3 | = i2cset -y 1 0x48 0x03
@@ -67,16 +68,36 @@ def write_config(c_ifttt_key='NONE', c_notify_moisture_level='0'):
         json.dump(config, fh)
 
 
-def run_server():
-    web_dir = os.path.join(os.path.dirname(__file__), 'www')
-    os.chdir(web_dir)
-    handler = http.server.SimpleHTTPRequestHandler
-    httpd = socketserver.TCPServer(('', PORT), handler)
-    httpd.socket = ssl.wrap_socket(httpd.socket,
-                                   certfile='/home/pi/tls/device.pem',
-                                   server_side=True)
-    print(datetime.datetime.now(), 'Running server at port', PORT)
-    httpd.serve_forever()
+class HTTPSHandler(http.server.BaseHTTPRequestHandler):
+    def do_POST(self):  # noqa: N802
+        self.send_header('Content-type', 'text/html')
+        if self.path == '/set-threshold':
+            length = int(self.headers.get('content-length'))
+            field_data = self.rfile.read(length)
+            fields = urllib.parse.parse_qs(field_data)
+            threshold_field = fields.get(b'threshold')
+            if threshold_field is not None:
+                threshold = str(threshold_field).split('\'')[1]
+                write_config(c_notify_moisture_level=threshold)
+                self.send_response(200)
+                self.wfile.write('Posted'.encode('utf-8'))
+            else:
+                self.send_response(400)
+                self.wfile.write('Bad Request!'.encode('utf-8'))
+
+    def do_GET(self):  # noqa: N802
+        self.send_header('Content-type', 'text/html')
+        file_path = './www' + self.path
+        if os.path.isfile(file_path):
+            self.send_response(200)
+            fh = open(file_path, 'r')
+            self.wfile.write(fh.read().encode('utf-8'))
+        elif file_path == './www/':
+            self.send_response(200)
+            self.wfile.write('Hello'.encode('utf-8'))
+        else:
+            self.send_response(404)
+            self.wfile.write('File not found!'.encode('utf-8'))
 
 
 class HTTPRedirect(http.server.SimpleHTTPRequestHandler):
@@ -86,6 +107,16 @@ class HTTPRedirect(http.server.SimpleHTTPRequestHandler):
         new_path = '%s%s' % (URL, self.path)
         self.send_header('Location', new_path)
         self.end_headers()
+
+
+def run_server():
+    socketserver.TCPServer.allow_reuse_address = True
+    httpd = socketserver.TCPServer(('', PORT), HTTPSHandler)
+    httpd.socket = ssl.wrap_socket(httpd.socket,
+                                   certfile='/home/pi/tls/device.pem',
+                                   server_side=True)
+    print(datetime.datetime.now(), 'Running server at port', PORT)
+    httpd.serve_forever()
 
 
 def run_http():

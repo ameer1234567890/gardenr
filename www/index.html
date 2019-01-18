@@ -85,16 +85,14 @@
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.open('GET', '/data.json', true);
       xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4) {
-          if(xmlhttp.status == 200) {
-            var obj = JSON.parse(xmlhttp.responseText);
-            document.getElementById('updated').innerHTML = humanDate(obj.updated * 1000);
-            document.getElementById('updated').classList.add('update');
-            setTimeout(function(){document.getElementById('updated').classList.remove('update');}, 1500);
-            document.getElementById('moisture').innerHTML = roundToTwoDec(obj.moisture);
-            document.getElementById('tempurature').innerHTML = roundToTwoDec(obj.temperature) + '°C';
-            document.getElementById('humidity').innerHTML = roundToTwoDec(obj.humidity) + '%';
-          }
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          var obj = JSON.parse(xmlhttp.responseText);
+          document.getElementById('updated').innerHTML = humanDate(obj.updated * 1000);
+          document.getElementById('updated').classList.add('update');
+          setTimeout(function(){document.getElementById('updated').classList.remove('update');}, 1500);
+          document.getElementById('moisture').innerHTML = roundToTwoDec(obj.moisture);
+          document.getElementById('tempurature').innerHTML = roundToTwoDec(obj.temperature) + '°C';
+          document.getElementById('humidity').innerHTML = roundToTwoDec(obj.humidity) + '%';
         }
       }
       xmlhttp.send(null);
@@ -115,18 +113,11 @@
         xmlhttp.open('POST', '/set-threshold', true);
         xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xmlhttp.onreadystatechange = function() {
-          if (xmlhttp.readyState == 4) {
-            if(xmlhttp.status == 200) {
-              threshold.style.backgroundColor = '#4caf50';
-              setTimeout(function(){
-                threshold.style.backgroundColor = '#ffffff';
-              }, 1000);
-            } else {
-              threshold.style.backgroundColor = '#f44336';
-              setTimeout(function(){
-                threshold.style.backgroundColor = '#ffffff';
-              }, 1000);
-            }
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            threshold.style.backgroundColor = '#4caf50';
+            setTimeout(function(){
+              threshold.style.backgroundColor = '#ffffff';
+            }, 1000);
           } else {
             threshold.style.backgroundColor = '#f44336';
             setTimeout(function(){
