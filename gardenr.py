@@ -98,7 +98,7 @@ class HTTPSHandler(http.server.BaseHTTPRequestHandler):
         ext = os.path.splitext(file_path)[1]
         print(file_path)
         print(ext)
-        if ext is None:
+        if not ext:
             print('here we go')
             ext = '.html'
         if file_path == './www/':
