@@ -68,7 +68,7 @@ def write_config(c_ifttt_key='NONE', c_notify_moisture_level='0'):
         json.dump(config, fh)
 
 
-class HTTPSHandler(http.server.BaseHTTPRequestHandler):
+class HTTPSHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):  # noqa: N802
         if self.path == '/set-threshold':
             length = int(self.headers.get('content-length'))
@@ -87,7 +87,7 @@ class HTTPSHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write('Bad Request!'.encode('utf-8'))
 
     def do_GET(self):  # noqa: N802
-        return http.server.BaseHTTPRequestHandler.do_GET(self)
+        return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 
 class HTTPRedirect(http.server.SimpleHTTPRequestHandler):
