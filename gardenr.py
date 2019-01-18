@@ -69,8 +69,6 @@ def write_config(c_ifttt_key='NONE', c_notify_moisture_level='0'):
 
 
 class HTTPSHandler(http.server.SimpleHTTPRequestHandler):
-    global notify_moisture_level
-
     def do_POST(self):  # noqa: N802
         global notify_moisture_level
         if self.path == '/set-threshold':
@@ -174,8 +172,9 @@ def update_data():
         humidity, temperature = get_temperature_and_humidity()
         data['temperature'] = str(temperature)
         data['humidity'] = str(humidity)
-        print(notify_moisture_level)
         data['threshold'] = str(notify_moisture_level)
+        print(str(notify_moisture_level))
+        print(data['threshold'])
         json_data = json.dumps(data)
         with open(UPDATE_FILE, 'w') as fh:
             fh.write(json_data)
