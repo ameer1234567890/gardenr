@@ -69,6 +69,8 @@ def write_config(c_ifttt_key='NONE', c_notify_moisture_level='0'):
 
 
 class HTTPSHandler(http.server.SimpleHTTPRequestHandler):
+    global notify_moisture_level
+
     def do_POST(self):  # noqa: N802
         global notify_moisture_level
         if self.path == '/set-threshold':
