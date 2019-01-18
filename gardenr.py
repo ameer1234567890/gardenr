@@ -87,7 +87,7 @@ class HTTPSHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write('Bad Request!'.encode('utf-8'))
 
     def do_GET(self):  # noqa: N802
-        return http.server.SimpleHTTPRequestHandler.do_GET(self)
+        return http.server.BaseHTTPRequestHandler.do_GET(self)
 
 
 class HTTPRedirect(http.server.SimpleHTTPRequestHandler):
