@@ -81,6 +81,16 @@
       return (parseInt(number*d)/d).toFixed(decimals);
     }
 
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function takeBreak() {
+      console.log('Waiting for 10 seconds since we do not need a flash of old threshold!');
+      await sleep(10000);
+      console.log('Break is over!');
+    }
+
     (function getData() {
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.open('GET', '/data.json', true);
@@ -119,6 +129,7 @@
             setTimeout(function(){
               threshold.style.backgroundColor = '#ffffff';
             }, 1000);
+            takeBreak()
           } else {
             threshold.style.backgroundColor = '#f44336';
             setTimeout(function(){
