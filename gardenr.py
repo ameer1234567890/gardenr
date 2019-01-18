@@ -84,6 +84,7 @@ class HTTPSHandler(http.server.SimpleHTTPRequestHandler):
                 print(datetime.datetime.now(),
                       'Notify threshold set to {}'
                       .format(notify_moisture_level))
+                update_data()
                 self.send_response(200)
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
