@@ -87,38 +87,8 @@ class HTTPSHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write('Bad Request!'.encode('utf-8'))
 
     def do_GET(self):  # noqa: N802
-        mime = {}
-        mime['.html'] = 'text/html'
-        mime['.png'] = 'image/png'
-        mime['.svg'] = 'image/svg+xml'
-        mime['.json'] = 'application/json'
-        mime['.webmanifest'] = 'application/manifest+json'
-        mime['.js'] = 'text/javascript'
-        file_path = './www' + self.path
-        ext = os.path.splitext(file_path)[1]
-        if not ext:
-            ext = '.html'
-        if file_path == './www/':
-            file_path = './www/index.html'
-        if os.path.isfile(file_path):
-            self.send_response(200)
-            if ext == '.png':
-                self.send_header('Content-type', mime[ext])
-                with open(file_path, 'rb') as fh:
-                    self.wfile.write(fh.read())
-            elif ext == '.js':
-                print('OK')
-                self.send_header("Content-type", "text/javascript")
-                with open(file_path, 'r') as fh:
-                    self.wfile.write(fh.read().encode('utf-8'))
-            else:
-                self.send_header('Content-type', mime[ext])
-                with open(file_path, 'r') as fh:
-                    self.wfile.write(fh.read().encode('utf-8'))
-        else:
-            self.send_response(404)
-            self.send_header('Content-type', 'text/html')
-            self.wfile.write('File not found!'.encode('utf-8'))
+        a = http.server.SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
+        return a
 
 
 class HTTPRedirect(http.server.SimpleHTTPRequestHandler):
@@ -131,6 +101,8 @@ class HTTPRedirect(http.server.SimpleHTTPRequestHandler):
 
 
 def run_server():
+    web_dir = os.path.join(os.path.dirname(__file__), 'www')
+    os.chdir(web_dir)
     socketserver.TCPServer.allow_reuse_address = True
     httpd = socketserver.TCPServer(('', PORT), HTTPSHandler)
     httpd.socket = ssl.wrap_socket(httpd.socket,
