@@ -64,6 +64,8 @@
     </a>
   </footer>
   <script>
+    var tGetData;
+
     function humanDate(date) {
       date = new Date(date);
       return date.getFullYear() +
@@ -86,9 +88,12 @@
     }
 
     async function takeBreak() {
+      console.log('Clearing timeout for getData!');
+      clearTimeout(tGetData);
       console.log('Waiting for 10 seconds since we do not need a flash of old threshold!');
       await sleep(10000);
       console.log('Break is over!');
+      getData();
     }
 
     (function getData() {
@@ -107,7 +112,7 @@
         }
       }
       xmlhttp.send(null);
-      setTimeout(getData, 10000);
+      tGetData = setTimeout(getData, 10000);
     })();
 
     document.getElementById('save').addEventListener('click', function(event) {
