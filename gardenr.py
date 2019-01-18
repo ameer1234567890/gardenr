@@ -102,11 +102,16 @@ class HTTPSHandler(http.server.BaseHTTPRequestHandler):
             file_path = './www/index.html'
         if os.path.isfile(file_path):
             self.send_response(200)
-            self.send_header('Content-type', mime[ext])
             if ext == '.png':
+                self.send_header('Content-type', mime[ext])
                 with open(file_path, 'rb') as fh:
                     self.wfile.write(fh.read())
+            elif ext == '.js':
+                self.send_header('Content-type', 'text/javascript')
+                with open(file_path, 'r') as fh:
+                    self.wfile.write(fh.read().encode('utf-8'))
             else:
+                self.send_header('Content-type', mime[ext])
                 with open(file_path, 'r') as fh:
                     self.wfile.write(fh.read().encode('utf-8'))
         else:
