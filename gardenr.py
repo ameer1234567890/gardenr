@@ -96,7 +96,6 @@ class HTTPSHandler(http.server.BaseHTTPRequestHandler):
         mime['.js'] = 'text/javascript'
         file_path = './www' + self.path
         ext = os.path.splitext(file_path)[1]
-        print(ext)
         if ext is None:
             ext = '.html'
         if file_path == './www/':
@@ -104,7 +103,7 @@ class HTTPSHandler(http.server.BaseHTTPRequestHandler):
         if os.path.isfile(file_path):
             self.send_response(200)
             self.send_header('Content-type', mime[ext])
-            if mime[ext] == 'png':
+            if ext == '.png':
                 with open(file_path, 'rb') as fh:
                     self.wfile.write(fh.read())
             else:
