@@ -70,6 +70,7 @@ def write_config(c_ifttt_key='NONE', c_notify_moisture_level='0'):
 
 class HTTPSHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):  # noqa: N802
+        global notify_moisture_level
         if self.path == '/set-threshold':
             length = int(self.headers.get('content-length'))
             field_data = self.rfile.read(length)
@@ -137,6 +138,7 @@ def get_temperature_and_humidity():
 
 
 def notify_moisture(moisture):
+    global notify_moisture_level
     if int(notify_moisture_level) != 0 and ifttt_key:
         if moisture > int(notify_moisture_level):
             with open(NOTIFY_FILE, 'r') as fh:
@@ -161,6 +163,7 @@ def notify_moisture(moisture):
 
 
 def update_data():
+    global notify_moisture_level
     while True:
         print(datetime.datetime.now(), 'Updating data...')
         moisture = get_moisture() * 10
