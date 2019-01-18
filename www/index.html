@@ -93,6 +93,7 @@
           document.getElementById('moisture').innerHTML = roundToTwoDec(obj.moisture);
           document.getElementById('tempurature').innerHTML = roundToTwoDec(obj.temperature) + '°C';
           document.getElementById('humidity').innerHTML = roundToTwoDec(obj.humidity) + '%';
+          document.getElementById('threshold').value = obj.threshold;
         }
       }
       xmlhttp.send(null);

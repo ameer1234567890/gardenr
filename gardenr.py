@@ -171,6 +171,7 @@ def update_data():
         humidity, temperature = get_temperature_and_humidity()
         data['temperature'] = str(temperature)
         data['humidity'] = str(humidity)
+        data['threshold'] = str(notify_moisture_level)
         json_data = json.dumps(data)
         with open(UPDATE_FILE, 'w') as fh:
             fh.write(json_data)
