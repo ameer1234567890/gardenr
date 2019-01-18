@@ -34,6 +34,7 @@ CONFIG_FILE = '/boot/gardenr/config.json'  # Since /dev/root is RO
 data = {}
 ifttt_key = ''
 notify_moisture_level = ''
+moisture = 0
 
 
 if not os.path.isfile(NOTIFY_FILE):
@@ -147,7 +148,8 @@ def notify_moisture(moisture):
                 notified = str(fh.read())
             if notified == 'NO':
                 print(datetime.datetime.now(),
-                      'Low moisture level detected! Notifying...')
+                      'Low moisture level detected ({})! Notifying...'
+                      .format(moisture))
                 maker_url = 'https://maker.ifttt.com/trigger/' + \
                             'soil_moisture/with/key/'
                 maker_url = maker_url + ifttt_key
@@ -158,7 +160,8 @@ def notify_moisture(moisture):
                     fh.write('YES')
             else:
                 print(datetime.datetime.now(),
-                      'Low moisture level detected! Notified already!')
+                      'Low moisture level detected ({})! Notified already!'
+                      .format(moisture))
         else:
             with open(NOTIFY_FILE, 'w') as fh:
                 fh.write('NO')
@@ -166,32 +169,40 @@ def notify_moisture(moisture):
 
 def update_data():
     global notify_moisture_level
-    while True:
-        print(datetime.datetime.now(), 'Updating data...')
-        moisture = get_moisture() * 10
-        data['updated'] = str(time.time())
-        data['moisture'] = str(moisture)
-        humidity, temperature = get_temperature_and_humidity()
-        data['temperature'] = str(temperature)
-        data['humidity'] = str(humidity)
-        data['threshold'] = str(notify_moisture_level)
-        json_data = json.dumps(data)
-        with open(UPDATE_FILE, 'w') as fh:
-            fh.write(json_data)
-        update_screen()
-        notify_moisture(moisture)
-        time.sleep(UPDATE_INTERVAL)
+    global moisture
+    print(datetime.datetime.now(), 'Updating data...')
+    read_config()
+    moisture = get_moisture() * 10
+    data['updated'] = str(time.time())
+    data['moisture'] = str(moisture)
+    humidity, temperature = get_temperature_and_humidity()
+    data['temperature'] = str(temperature)
+    data['humidity'] = str(humidity)
+    data['threshold'] = str(notify_moisture_level)
+    json_data = json.dumps(data)
+    with open(UPDATE_FILE, 'w') as fh:
+        fh.write(json_data)
 
 
 def update_screen():
-    print(datetime.datetime.now(), 'Updating screen...')
+    global moisture
+    print(datetime.datetime.now(), 'Updating screen with moisture {}...'
+          .format(moisture))
     updated_time = str(datetime.datetime.fromtimestamp(float(data['updated']))
                        .strftime('%Y-%m-%d %H:%M:%S'))
-    moisture = get_moisture()
-    moisture_lcd = 'MOISTURE:' + str(moisture * 10)
+    moisture_lcd = 'MOISTURE:' + str(moisture)
     my_lcd = I2C_LCD_driver.lcd()
     my_lcd.lcd_display_string(updated_time, 1, 0)
     my_lcd.lcd_display_string(moisture_lcd, 2, 0)
+
+
+def run_process():
+    global moisture
+    while True:
+        update_data()
+        update_screen()
+        notify_moisture(moisture)
+        time.sleep(UPDATE_INTERVAL)
 
 
 if __name__ == '__main__':
@@ -202,13 +213,13 @@ if __name__ == '__main__':
         read_config()
         run_server_thread = multiprocessing.Process(target=run_server)
         run_server_thread.start()
-        update_data_thread = multiprocessing.Process(target=update_data)
-        update_data_thread.start()
+        run_process_thread = multiprocessing.Process(target=run_process)
+        run_process_thread.start()
         run_http_thread = multiprocessing.Process(target=run_http)
         run_http_thread.start()
     except:  # noqa: B001
         run_server_thread.terminate()
-        update_data_thread.terminate()
+        run_process_thread.terminate()
         run_http_thread.terminate()
         os.remove(PID_FILE)
         print('PID file removed!')
