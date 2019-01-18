@@ -81,6 +81,7 @@ class HTTPSHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_response(200)
                 self.send_header('Content-type', 'text/html')
                 self.wfile.write('Posted'.encode('utf-8'))
+                print('OK')
             else:
                 self.send_response(400)
                 self.send_header('Content-type', 'text/html')
