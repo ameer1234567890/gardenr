@@ -103,10 +103,11 @@ class HTTPSHandler(http.server.BaseHTTPRequestHandler):
         if os.path.isfile(file_path):
             self.send_response(200)
             self.send_header('Content-type', mime[ext])
-            fh = open(file_path, 'r')
             if mime[ext] == 'png':
+                fh = open(file_path, 'rb')
                 self.wfile.write(fh.read())
             else:
+                fh = open(file_path, 'r')
                 self.wfile.write(fh.read().encode('utf-8'))
         else:
             self.send_response(404)
