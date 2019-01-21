@@ -33,8 +33,11 @@ NOTIFY_FILE = '/boot/gardenr/notify.log'  # Since /dev/root is RO
 CONFIG_FILE = '/boot/gardenr/config.json'  # Since /dev/root is RO
 data = {}
 ifttt_key = ''
+thingspeak_key = ''
 notify_moisture_level = ''
 moisture = 0
+temperature = 0
+humidity = 0
 
 
 if not os.path.isfile(NOTIFY_FILE):
@@ -54,16 +57,20 @@ def check_config_file():
 
 def read_config():
     global ifttt_key
+    global thingspeak_key
     global notify_moisture_level
     with open(CONFIG_FILE) as fh:
         config = json.load(fh)
     ifttt_key = config['IFTTT_KEY']
+    thingspeak_key = config['THINGSPEAK_KEY']
     notify_moisture_level = config['NOTIFY_MOISTURE_LEVEL']
 
 
-def write_config(c_ifttt_key='NONE', c_notify_moisture_level='0'):
+def write_config(c_ifttt_key='NONE', c_thingspeak_key='NONE',
+                 c_notify_moisture_level='0'):
     config = {}
     config['IFTTT_KEY'] = c_ifttt_key
+    config['THINGSPEAK_KEY'] = c_thingspeak_key
     config['NOTIFY_MOISTURE_LEVEL'] = c_notify_moisture_level
     with open(CONFIG_FILE, 'w') as fh:
         json.dump(config, fh)
@@ -170,6 +177,8 @@ def notify_moisture(moisture):
 def update_data():
     global notify_moisture_level
     global moisture
+    global temperature
+    global humidity
     print(datetime.datetime.now(), 'Updating data...')
     read_config()
     moisture = get_moisture() * 10
@@ -196,12 +205,25 @@ def update_screen():
     my_lcd.lcd_display_string(moisture_lcd, 2, 0)
 
 
+def upload_data(moisture, temperature, humidity):
+    thingspeak_url = 'https://api.thingspeak.com/update?' + \
+                     'api_key=' + thingspeak_key + \
+                     '&field1=' + str(moisture) + \
+                     '&field2=' + str(temperature) + \
+                     '&field3=' + str(humidity)
+    r = requests.get(thingspeak_url)
+    print('Thingspeak Response: ', r.text)
+
+
 def run_process():
     global moisture
+    global temperature
+    global humidity
     while True:
         update_data()
         update_screen()
         notify_moisture(moisture)
+        upload_data(moisture, temperature, humidity)
         time.sleep(UPDATE_INTERVAL)
 
 
