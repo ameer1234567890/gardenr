@@ -1,6 +1,6 @@
 #!/bin/sh
 
-check_tools(){
+check_tools() {
   tools="flake8 shellcheck"
   for tool in $tools; do
     if [ ! "$(command -v "$tool")" ]; then
@@ -13,7 +13,7 @@ check_tools(){
 check_tools
 
 has_errored=false
-find . ! -name "$(printf "*\n*")" -name '*.py' | grep -v './env' > tmp
+find . ! -name "$(printf "*\n*")" -name '*.py' | grep -v './env' >tmp
 while IFS= read -r file; do
   printf "Running flake8 on %s.... Result: " "$file"
   flake8 --count "$file"
@@ -21,10 +21,10 @@ while IFS= read -r file; do
   if [ "$flake8_status" != 0 ]; then
     has_errored=true
   fi
-done < tmp
+done <tmp
 rm tmp
 
-find . ! -name "$(printf "*\n*")" -name '*.sh' | grep -v './env' > tmp
+find . ! -name "$(printf "*\n*")" -name '*.sh' | grep -v './env' >tmp
 while IFS= read -r file; do
   printf "Running shellcheck on %s.... Result: " "$file"
   shellcheck "$file"
@@ -33,7 +33,7 @@ while IFS= read -r file; do
   if [ "$shellcheck_status" != 0 ]; then
     has_errored=true
   fi
-done < tmp
+done <tmp
 rm tmp
 
 if [ "$has_errored" = true ]; then

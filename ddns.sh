@@ -13,7 +13,6 @@
 # shellcheck disable=SC2089
 # shellcheck disable=SC2090
 
-
 EMAIL=''
 TOKEN=''
 DOMAIN=''
@@ -26,9 +25,7 @@ REC_ID=''
 # shellcheck disable=SC1091
 . ../ddns.conf
 
-
 INTERVAL=60 # 60 minutes
-
 
 set -euo pipefail
 #set -x # enable for debugging
