@@ -206,11 +206,12 @@ def update_screen():
 
 
 def upload_data(moisture, temperature, humidity):
+    print(datetime.datetime.now(), 'Uploading data to Thingspeak...')
     thingspeak_url = 'https://api.thingspeak.com/update?' + \
-                     'api_key=' + thingspeak_key + \
-                     '&field1=' + str(moisture) + \
-                     '&field2=' + str(temperature) + \
-                     '&field3=' + str(humidity)
+        'api_key=' + thingspeak_key + \
+        '&field1=' + str(moisture) + \
+        '&field2=' + str(temperature) + \
+        '&field3=' + str(humidity)
     r = requests.get(thingspeak_url)
     print('Thingspeak Response: ', r.text)
 
