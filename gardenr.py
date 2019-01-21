@@ -38,6 +38,7 @@ notify_moisture_level = ''
 moisture = 0
 temperature = 0
 humidity = 0
+upload_counter = 0
 
 
 if not os.path.isfile(NOTIFY_FILE):
@@ -206,15 +207,22 @@ def update_screen():
 
 
 def upload_data(moisture, temperature, humidity):
-    print(datetime.datetime.now(), 'Uploading data to Thingspeak...')
-    thingspeak_url = 'https://api.thingspeak.com/update?' + \
-        'api_key=' + thingspeak_key + \
-        '&field1=' + str(moisture) + \
-        '&field2=' + str(temperature) + \
-        '&field3=' + str(humidity)
-    r = requests.get(thingspeak_url)
-    print(datetime.datetime.now(), 'Thingspeak Response: {}'
-          .format(r.text))
+    global upload_counter
+    upload_counter += 1
+    # Upload to Thingspeak only once in every 2 runs (20 seconds)
+    # to follow Thingspeak's API limits.
+    if upload_counter == 1:
+        print(datetime.datetime.now(), 'Uploading data to Thingspeak...')
+        thingspeak_url = 'https://api.thingspeak.com/update?' + \
+            'api_key=' + thingspeak_key + \
+            '&field1=' + str(moisture) + \
+            '&field2=' + str(temperature) + \
+            '&field3=' + str(humidity)
+        r = requests.get(thingspeak_url)
+        print(datetime.datetime.now(), 'Thingspeak Response: {}'
+              .format(r.text))
+    else:
+        upload_counter = 0
 
 
 def run_process():
