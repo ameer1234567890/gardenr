@@ -180,22 +180,29 @@ def update_data():
     global moisture
     global temperature
     global humidity
-    print(datetime.datetime.now(), 'Updating data...')
-    read_config()
-    moisture = get_moisture() * 10
-    data['updated'] = str(time.time())
-    data['moisture'] = str(moisture)
-    humidity, temperature = get_temperature_and_humidity()
-    data['temperature'] = str(temperature)
-    data['humidity'] = str(humidity)
-    data['threshold'] = str(notify_moisture_level)
-    json_data = json.dumps(data)
-    with open(UPDATE_FILE, 'w') as fh:
-        fh.write(json_data)
+    while True:
+        print(datetime.datetime.now(), 'Updating data...')
+        read_config()
+        moisture = get_moisture() * 10
+        data['updated'] = str(time.time())
+        data['moisture'] = str(moisture)
+        humidity, temperature = get_temperature_and_humidity()
+        data['temperature'] = str(temperature)
+        data['humidity'] = str(humidity)
+        data['threshold'] = str(notify_moisture_level)
+        json_data = json.dumps(data)
+        with open(UPDATE_FILE, 'w') as fh:
+            fh.write(json_data)
+        multiprocessing.Process(target=update_screen, args=(moisture,)).start()
+        multiprocessing.Process(target=notify_moisture, args=(moisture,)) \
+                       .start()
+        multiprocessing.Process(target=upload_data,
+                                args=(moisture, temperature, humidity,)) \
+                       .start()
+        time.sleep(UPDATE_INTERVAL)
 
 
-def update_screen():
-    global moisture
+def update_screen(moisture):
     print(datetime.datetime.now(), 'Updating screen with moisture {}...'
           .format(moisture))
     updated_time = str(datetime.datetime.fromtimestamp(float(data['updated']))
@@ -225,18 +232,6 @@ def upload_data(moisture, temperature, humidity):
         upload_counter = 0
 
 
-def run_process():
-    global moisture
-    global temperature
-    global humidity
-    while True:
-        update_data()
-        update_screen()
-        notify_moisture(moisture)
-        upload_data(moisture, temperature, humidity)
-        time.sleep(UPDATE_INTERVAL)
-
-
 if __name__ == '__main__':
     try:
         with open(PID_FILE, 'w') as fh:
@@ -245,13 +240,13 @@ if __name__ == '__main__':
         read_config()
         run_server_thread = multiprocessing.Process(target=run_server)
         run_server_thread.start()
-        run_process_thread = multiprocessing.Process(target=run_process)
-        run_process_thread.start()
+        update_data_thread = multiprocessing.Process(target=update_data)
+        update_data_thread.start()
         run_http_thread = multiprocessing.Process(target=run_http)
         run_http_thread.start()
     except:  # noqa: B001
         run_server_thread.terminate()
-        run_process_thread.terminate()
+        update_data_thread.terminate()
         run_http_thread.terminate()
         os.remove(PID_FILE)
         print('PID file removed!')
