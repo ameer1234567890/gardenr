@@ -230,7 +230,7 @@ def upload_data(moisture, temperature, humidity):
         '&field3=' + str(humidity)
     r = requests.get(thingspeak_url)
     print(datetime.datetime.now(), 'Thingspeak Response: {}'
-            .format(r.text))
+          .format(r.text))
 
 
 if __name__ == '__main__':
