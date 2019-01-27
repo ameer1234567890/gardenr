@@ -177,6 +177,7 @@ def notify_moisture(moisture):
 
 def update_data():
     global notify_moisture_level
+    global upload_counter
     global moisture
     global temperature
     global humidity
@@ -196,9 +197,15 @@ def update_data():
         multiprocessing.Process(target=update_screen, args=(moisture,)).start()
         multiprocessing.Process(target=notify_moisture, args=(moisture,)) \
                        .start()
-        multiprocessing.Process(target=upload_data,
-                                args=(moisture, temperature, humidity,)) \
-                       .start()
+        # Upload to Thingspeak only once in every 2 runs (20 seconds)
+        # to follow Thingspeak's API limits.
+        upload_counter += 1
+        if upload_counter == 1:
+            multiprocessing.Process(target=upload_data,
+                                    args=(moisture, temperature, humidity,)) \
+                        .start()
+        else:
+            upload_counter = 0
         time.sleep(UPDATE_INTERVAL)
 
 
@@ -214,22 +221,15 @@ def update_screen(moisture):
 
 
 def upload_data(moisture, temperature, humidity):
-    global upload_counter
-    upload_counter += 1
-    # Upload to Thingspeak only once in every 2 runs (20 seconds)
-    # to follow Thingspeak's API limits.
-    if upload_counter == 1:
-        print(datetime.datetime.now(), 'Uploading data to Thingspeak...')
-        thingspeak_url = 'https://api.thingspeak.com/update?' + \
-            'api_key=' + thingspeak_key + \
-            '&field1=' + str(moisture) + \
-            '&field2=' + str(temperature) + \
-            '&field3=' + str(humidity)
-        r = requests.get(thingspeak_url)
-        print(datetime.datetime.now(), 'Thingspeak Response: {}'
-              .format(r.text))
-    else:
-        upload_counter = 0
+    print(datetime.datetime.now(), 'Uploading data to Thingspeak...')
+    thingspeak_url = 'https://api.thingspeak.com/update?' + \
+        'api_key=' + thingspeak_key + \
+        '&field1=' + str(moisture) + \
+        '&field2=' + str(temperature) + \
+        '&field3=' + str(humidity)
+    r = requests.get(thingspeak_url)
+    print(datetime.datetime.now(), 'Thingspeak Response: {}'
+            .format(r.text))
 
 
 if __name__ == '__main__':
