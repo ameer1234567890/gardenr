@@ -206,6 +206,7 @@ def update_data():
                         .start()
         else:
             upload_counter = 0
+        print('')  # Nicer logs
         time.sleep(UPDATE_INTERVAL)
 
 
