@@ -182,6 +182,7 @@ def update_data():
     global temperature
     global humidity
     while True:
+        print('')  # Nicer logs
         print(datetime.datetime.now(), 'Updating data...')
         read_config()
         moisture = get_moisture() * 10
@@ -206,7 +207,6 @@ def update_data():
                         .start()
         else:
             upload_counter = 0
-        print('')  # Nicer logs
         time.sleep(UPDATE_INTERVAL)
 
 
