@@ -4,6 +4,7 @@ After=network.target
 [Service]
 Environment=VIRTUAL_ENV=/home/pi/gardenr/env
 WorkingDirectory=/home/pi/gardenr
+Environment=PYTHONUNBUFFERED=1
 ExecStart=/usr/bin/sudo /home/pi/gardenr/env/bin/python3 /home/pi/gardenr/gardenr.py
 # we may not have network yet, so retry until success
 Restart=on-failure
