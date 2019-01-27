@@ -156,7 +156,7 @@ def notify_moisture(moisture):
                 notified = str(fh.read())
             if notified == 'NO':
                 print(datetime.datetime.now(),
-                      'Low moisture level detected ({})! Notifying...'
+                      'Low moisture ({})! Notifying...'
                       .format(moisture))
                 maker_url = 'https://maker.ifttt.com/trigger/' + \
                             'soil_moisture/with/key/'
@@ -168,7 +168,7 @@ def notify_moisture(moisture):
                     fh.write('YES')
             else:
                 print(datetime.datetime.now(),
-                      'Low moisture level detected ({})! Notified already!'
+                      'Low moisture ({})! Notified already!'
                       .format(moisture))
         else:
             with open(NOTIFY_FILE, 'w') as fh:
