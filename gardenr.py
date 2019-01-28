@@ -85,7 +85,7 @@ class HTTPSHandler(http.server.SimpleHTTPRequestHandler):
             field_data = self.rfile.read(length)
             fields = urllib.parse.parse_qs(field_data)
             threshold_field = fields.get(b'threshold')
-            if threshold_field is not None:
+            if threshold_field is not None and isinstance(int(threshold_field), int):
                 threshold = str(threshold_field).split('\'')[1]
                 write_config(c_notify_moisture_level=threshold)
                 notify_moisture_level = threshold
