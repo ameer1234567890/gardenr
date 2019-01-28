@@ -87,7 +87,7 @@ class HTTPSHandler(http.server.SimpleHTTPRequestHandler):
             threshold_field = fields.get(b'threshold')
             if threshold_field is not None:
                 threshold = str(threshold_field).split('\'')[1]
-                if isinstance(int(threshold_field), int):
+                if isinstance(int(threshold), int):
                     write_config(c_notify_moisture_level=threshold)
                     notify_moisture_level = threshold
                     print(datetime.datetime.now(),
