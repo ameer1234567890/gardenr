@@ -85,17 +85,23 @@ class HTTPSHandler(http.server.SimpleHTTPRequestHandler):
             field_data = self.rfile.read(length)
             fields = urllib.parse.parse_qs(field_data)
             threshold_field = fields.get(b'threshold')
-            if threshold_field is not None and isinstance(int(threshold_field), int):
+            if threshold_field is not None:
                 threshold = str(threshold_field).split('\'')[1]
-                write_config(c_notify_moisture_level=threshold)
-                notify_moisture_level = threshold
-                print(datetime.datetime.now(),
-                      'Notify threshold set to {}'
-                      .format(notify_moisture_level))
-                self.send_response(200)
-                self.send_header('Content-type', 'text/html')
-                self.end_headers()
-                self.wfile.write('Posted'.encode('utf-8'))
+                if isinstance(int(threshold_field), int):
+                    write_config(c_notify_moisture_level=threshold)
+                    notify_moisture_level = threshold
+                    print(datetime.datetime.now(),
+                        'Notify threshold set to {}'
+                        .format(notify_moisture_level))
+                    self.send_response(200)
+                    self.send_header('Content-type', 'text/html')
+                    self.end_headers()
+                    self.wfile.write('Posted'.encode('utf-8'))
+                else:
+                    self.send_response(400)
+                    self.send_header('Content-type', 'text/html')
+                    self.end_headers()
+                    self.wfile.write('Bad Request!'.encode('utf-8'))
             else:
                 self.send_response(400)
                 self.send_header('Content-type', 'text/html')
