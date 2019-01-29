@@ -82,3 +82,16 @@ SCL           -  SCL
 #### Make Raspberry Pi's root filesystem read-only
 * This is an optional step, which woul reduce chances of filesystem corruption due to improper shutdowns
 * Use code and guide at: https://github.com/janztec/empc-arpi-linux-readonly
+* Add below to `/etc/profile.d/motd.sh`
+```shell
+if grep -qs 'overlay=yes' /proc/cmdline; then
+  cat <<'END_HEREDOC'
+
+
+==>WARNING: Root filesystem is read only.
+None of the changes you make will be preseved after reboot.
+To disable read only mode change 'overlay=yes' to 'overlay=no'
+at kernel commandline.
+END_HEREDOC
+fi
+```
