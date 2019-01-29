@@ -22,6 +22,7 @@ import multiprocessing
 PORT = 443
 PID_FILE = '/tmp/gardenr.pid'
 UPDATE_FILE = './www/data.json'
+CERT_FILE = '//etc/letsencrypt/live/gardenr.ameer.io/gardenr.pem'
 UPDATE_INTERVAL = 10  # Update every 10 seconds
 ADC_ADDRESS = 0x48
 DHT_SENSOR = Adafruit_DHT.DHT22
@@ -122,7 +123,7 @@ def run_server():
     socketserver.TCPServer.allow_reuse_address = True
     httpd = socketserver.TCPServer(('', PORT), HTTPSHandler)
     httpd.socket = ssl.wrap_socket(httpd.socket,
-                                   certfile='/home/pi/tls/device.pem',
+                                   certfile=CERT_FILE,
                                    server_side=True)
     print(datetime.datetime.now(), 'Running server at port', PORT)
     httpd.serve_forever()
