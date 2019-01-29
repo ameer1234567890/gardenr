@@ -14,6 +14,7 @@ else
 fi
 
 if [ "$(cat updated.txt 2>/dev/null)" = "YES" ]; then
+  rm updated.txt
   cat /etc/letsencrypt/live/gardenr.ameer.io/cert.pem > gardenr.pem
   cat /etc/letsencrypt/live/gardenr.ameer.io/privkey.pem >> gardenr.pem
   mv -f gardenr.pem /etc/letsencrypt/live/gardenr.ameer.io
