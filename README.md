@@ -73,6 +73,9 @@ SCL           -  SCL
 * Adafruit-DHT: https://github.com/adafruit/Adafruit_Python_DHT
 * I2C_LCD_driver: https://gist.github.com/DenisFromHR/cc863375a6e19dce359d
 
+#### Pictures
+* https://photos.app.goo.gl/o9qVq5qyfEnjEZFn7
+
 #### Credits
 * [Soil Moisture Sensor (Raspberry Pi)](https://www.instructables.com/id/Soil-Moisture-Sensor-Raspberry-Pi/)
 * [How To Setup an I2C LCD on the Raspberry Pi](http://www.circuitbasics.com/raspberry-pi-i2c-lcd-set-up-and-programming/)
