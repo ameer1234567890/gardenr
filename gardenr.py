@@ -32,6 +32,7 @@ DHT_PIN = 4
 URL = 'https://gardenr.ameer.io'
 NOTIFY_FILE = '/boot/gardenr/notify.log'  # Since /dev/root is RO
 CONFIG_FILE = '/boot/gardenr/config.json'  # Since /dev/root is RO
+LCD_ENABLE = false
 data = {}
 ifttt_key = ''
 thingspeak_key = ''
@@ -213,14 +214,15 @@ def update_data():
 
 
 def update_screen(moisture):
-    print(datetime.datetime.now(), 'Updating screen with moisture {}...'
-          .format(moisture))
-    updated_time = str(datetime.datetime.fromtimestamp(float(data['updated']))
-                       .strftime('%Y-%m-%d %H:%M:%S'))
-    moisture_lcd = 'MOISTURE:' + str(moisture)
-    my_lcd = I2C_LCD_driver.lcd()
-    my_lcd.lcd_display_string(updated_time, 1, 0)
-    my_lcd.lcd_display_string(moisture_lcd, 2, 0)
+    if LCD_ENABLE:
+        print(datetime.datetime.now(), 'Updating screen with moisture {}...'
+            .format(moisture))
+        updated_time = str(datetime.datetime.fromtimestamp(float(data['updated']))
+                        .strftime('%Y-%m-%d %H:%M:%S'))
+        moisture_lcd = 'MOISTURE:' + str(moisture)
+        my_lcd = I2C_LCD_driver.lcd()
+        my_lcd.lcd_display_string(updated_time, 1, 0)
+        my_lcd.lcd_display_string(moisture_lcd, 2, 0)
 
 
 def upload_data(moisture, temperature, humidity):
