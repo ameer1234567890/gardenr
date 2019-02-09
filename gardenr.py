@@ -32,7 +32,7 @@ DHT_PIN = 4
 URL = 'https://gardenr.ameer.io'
 NOTIFY_FILE = '/boot/gardenr/notify.log'  # Since /dev/root is RO
 CONFIG_FILE = '/boot/gardenr/config.json'  # Since /dev/root is RO
-LCD_ENABLE = 0
+LCD_ENABLE = False
 data = {}
 ifttt_key = ''
 thingspeak_key = ''
@@ -79,6 +79,14 @@ def write_config(c_ifttt_key='NONE', c_thingspeak_key='NONE',
         json.dump(config, fh)
 
 
+def is_int(value):
+    try:
+        int(value)
+        return True
+    except ValueError:
+        return False
+
+
 class HTTPSHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):  # noqa: N802
         global notify_moisture_level
@@ -89,7 +97,7 @@ class HTTPSHandler(http.server.SimpleHTTPRequestHandler):
             threshold_field = fields.get(b'threshold')
             if threshold_field is not None:
                 threshold = str(threshold_field).split('\'')[1]
-                if isinstance(int(threshold), int):
+                if is_int(threshold):
                     write_config(c_notify_moisture_level=threshold)
                     notify_moisture_level = threshold
                     print(datetime.datetime.now(),
@@ -137,7 +145,7 @@ def run_http():
 
 def get_moisture():
     # = i2cget -y 1 0x48
-    moisture_8bit = PFC8591.read_byte(ADC_ADDRESS)
+    PFC8591.read_byte(ADC_ADDRESS)
     # Read twice since first read is "cached"
     moisture_8bit = PFC8591.read_byte(ADC_ADDRESS)
     # convert 8 bit number to moisture 16.5/256
