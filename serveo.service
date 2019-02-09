@@ -5,7 +5,7 @@ After=network.target
 User=pi
 Group=pi
 WorkingDirectory=/home/pi
-ExecStart=/usr/bin/autossh -y -R gardenr:22:localhost:22 serveo.net < /dev/ptmx
+ExecStart=/usr/bin/autossh -y -R gardenr:22:127.0.0.1:22 serveo.net < /dev/ptmx
 # we may not have network yet, so retry until success
 Restart=on-failure
 RestartSec=3s
