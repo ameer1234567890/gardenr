@@ -87,10 +87,11 @@ SCL           -  SCL
 * Add below to `/etc/profile.d/motd.sh`
 ```shell
 if grep -qs 'overlay=yes' /proc/cmdline; then
-  cat <<'END_HEREDOC'
+  textred=$(tput setaf 3)
+  cat <<END_HEREDOC
 
 
-==>WARNING: Root filesystem is read only.
+${textred}==>WARNING: Root filesystem is read only.
 None of the changes you make will be preseved after reboot.
 To disable read only mode change 'overlay=yes' to 'overlay=no'
 at kernel commandline.
