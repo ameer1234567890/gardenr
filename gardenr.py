@@ -8,7 +8,7 @@ import ssl
 import time
 import json
 import smbus
-import sht21
+# import sht21
 import datetime
 import requests
 import http.server
@@ -17,7 +17,8 @@ import urllib.parse
 import Adafruit_DHT
 import I2C_LCD_driver
 import multiprocessing
-
+# import Adafruit_MCP3008
+# import Adafruit_GPIO.SPI as AdaSPI
 
 PORT = 443
 PID_FILE = '/tmp/gardenr.pid'
@@ -27,8 +28,10 @@ UPDATE_INTERVAL = 10  # Update every 10 seconds
 ADC_ADDRESS = 0x48
 DHT_SENSOR = Adafruit_DHT.DHT22
 PFC8591 = smbus.SMBus(1)
-SHT21 = sht21.SHT21()
+# SHT21 = sht21.SHT21()
 DHT_PIN = 4
+SPI_PORT = 0
+SPI_DEVICE = 0
 URL = 'https://gardenr.ameer.io'
 NOTIFY_FILE = '/boot/gardenr/notify.log'  # Since root partition is RO
 CONFIG_FILE = '/boot/gardenr/config.json'  # Since root partition is RO
@@ -50,6 +53,10 @@ if not os.path.isfile(NOTIFY_FILE):
 
 # set channel to AIN3 | = i2cset -y 1 0x48 0x03
 PFC8591.write_byte(ADC_ADDRESS, 0x03)
+
+
+# Initialize mcp on hardware SPI
+# mcp = Adafruit_MCP3008.MCP3008(spi=AdaSPI.SpiDev(SPI_PORT, SPI_DEVICE))
 
 
 def check_config_file():
@@ -148,6 +155,7 @@ def get_moisture():
     PFC8591.read_byte(ADC_ADDRESS)
     # Read twice since first read is "cached"
     moisture_8bit = PFC8591.read_byte(ADC_ADDRESS)
+    # moisture_8bit = mcp.read_adc(1)
     # convert 8 bit number to moisture 16.5/256
     # 16.5V max voltage for 0xff (=3.3V analog output signal)
     moisture = moisture_8bit * 0.064453125
