@@ -1,5 +1,5 @@
 python3-dev
-libi2c-tools
+libi2c-dev
 i2c-tools
 autossh
 certbot

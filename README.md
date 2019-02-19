@@ -90,7 +90,6 @@ if grep -qs 'overlay=yes' /proc/cmdline; then
   textred=$(tput setaf 3)
   cat <<END_HEREDOC
 
-
 ${textred}==>WARNING: Root filesystem is read only.
 None of the changes you make will be preserved after reboot.
 To disable read only mode change 'overlay=yes' to 'overlay=no'
