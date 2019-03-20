@@ -207,7 +207,7 @@ def update_data():
         moisture = get_moisture() * 10
         data['updated'] = str(time.time())
         data['moisture'] = str(moisture)
-        humidity, temperature = get_temperature_and_humidity()
+        temperature, humidity = get_temperature_and_humidity()
         data['temperature'] = str(temperature)
         data['humidity'] = str(humidity)
         data['threshold'] = str(notify_moisture_level)
