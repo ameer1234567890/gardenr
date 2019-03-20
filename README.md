@@ -18,7 +18,7 @@ An indoor gardening assistant
 * Note: `./testdht.py`, `./testsht.py` `./testlcd.py` and `./testmoisture.py` are test scripts which are used for testing individual sensors.
 
 #### TODO
-* Make a PCB to accomodate all sensors and the ADC.
+* Fabricate improved PCB.
 
 #### Components Used
 * Raspberry Pi 3B+
