@@ -5,7 +5,7 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
-systemctl stop gardenr.service
+systemctl -q is-active gardenr.service && systemctl stop gardenr.service
 
 if [ -d /etc/letsencrypt/live/gardenr.ameer.io ]; then
   sudo certbot renew --standalone --renew-hook "sh -c 'exit 100'"
